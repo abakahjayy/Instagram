@@ -6,6 +6,9 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 // import { BrowserRouter } from "react-router-dom";
+import { consumeGoogleLoginToken } from './utils/auth';
+
+consumeGoogleLoginToken();
 
 //We can also import React and ReactDOM from the modules above without the curly braises
 if ('serviceWorker' in navigator) {

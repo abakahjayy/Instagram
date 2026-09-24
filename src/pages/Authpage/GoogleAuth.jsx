@@ -10,8 +10,11 @@ const GoogleAuth = ({ prefix }) => {
 
 	const handleGoogleAuth = async () => {
 		try {
-			// Redirect to your backend authentication endpoint
-			window.location.href = "http://localhost:7004/api/v1/auth/google";
+			// FullBackendd sends the user back to redirect_uri with ?token=<jwt>, which
+			// consumeGoogleLoginToken() (utils/auth.js) picks up on page load. The site root is
+			// used because it's the one path the static host always serves.
+			const redirectUri = `${window.location.origin}/`;
+			window.location.href = `${import.meta.env.VITE_API_URL}/api/v1/auth/google?redirect_uri=${encodeURIComponent(redirectUri)}`;
 		} catch (err) {
 			setError(err.message);
 			showToast("Error", err.message, "error");

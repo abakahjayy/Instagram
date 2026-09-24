@@ -1,4 +1,5 @@
 import API from "./api.js";
+import useAuthStore from "../store/useAuthStore.js";
 
 export const loginUser = async (email, password) => {
     const { data } = await API.post("/api/v1/auth/login", { email, password });
@@ -10,6 +11,20 @@ export const registerUser = async (email, password,firstName,lastName,username) 
     const { data } = await API.post("/api/v1/auth/signup", { email, password,firstName,lastName,username });
     console.log(data);
     return data;
+};
+
+// Google sign-in (see GoogleAuth.jsx) lands back on the site with ?token=<jwt>.
+// Store it the same way a password login does, then strip it from the URL.
+// Must run before the app renders so App.jsx's dashboard fetch sees the token.
+export const consumeGoogleLoginToken = () => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (!token) return;
+    params.delete("token");
+    const query = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (query ? `?${query}` : "") + window.location.hash);
+    localStorage.setItem("user-info", JSON.stringify({ token }));
+    useAuthStore.getState().loginUser({ token });
 };
 
 // localStorage "user-info" is { message, token, userId } right after login and
