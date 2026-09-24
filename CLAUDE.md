@@ -45,9 +45,19 @@ Redux Toolkit, react-query, formik, styled-components and tailwind are in `packa
 
 **Data hooks.** Each backend operation has a custom hook in `src/hooks/` (`useLogin`, `useSignup`, `useGetFeedPosts`, `useGetUserPosts`, `useLikePost`, `useFollowUser`, `usePostComment`, `useEditProfile`, `useSearchUser`, and others). The pattern is: local `isLoading` state, an API call, an update to the Zustand store, and errors reported through `useShowToast()` (a Chakra toast wrapper taking `(title, description, status, duration?)`). Fetching hooks use an `AbortController` cleanup and ignore the `'canceled'` error. Put new backend interactions in a hook that follows this pattern.
 
-**Images.** Images are stored by the backend and referenced by id. `utils/fetchImage.js` fetches `/api/v1/posts/image/:id` as a blob and returns an object URL. `utils/imageUrl.js` (`ProfileUrl`) wraps that in a hook.
+**Images and videos.** Media lives in the backend's GridFS and is referenced by file id.
+- A post's `postId` is the id of its file. `mediaType` (`'image'` or `'video'`, with a default of `'image'` for older posts) decides how it's rendered.
+- `components/FeedPosts/PostMedia.jsx` renders every post's media, with variants `feed`, `thumb` and `full`. It builds direct URLs with `utils/media.js`: `imageUrl` uses `/posts/image/:id` and `mediaUrl` uses `/posts/media/:id`.
+- Videos must use `/posts/media/:id`, because only that route supports HTTP Range requests, which are needed for seeking.
+- Profile pictures still use the older blob approach: `utils/fetchImage.js`, wrapped in a hook by `utils/imageUrl.js` (`ProfileUrl`).
+- Uploads are capped at 50MB for video and 10MB for images, on both client (`hooks/usePreviewing.js`, pass `{ allowVideo: true }`) and server. Every file goes into the same MongoDB, so keep the caps.
 
-**Messaging.** `components/ChatApp/ChatAppDemo.jsx` opens a socket.io connection to `VITE_API_URL`. `/messages/:id` renders `components/Modals/messagesModal.jsx`.
+**Messaging.**
+- `utils/socket.js` holds one shared socket.io connection, authenticated with the JWT that `utils/auth.js` `getAuthToken()` reads from `localStorage["user-info"].token`. The store's user object doesn't reliably include the token.
+- `hooks/useChat.js` loads history over REST (`GET /api/v1/messages/:me/:other`) and then sends over the socket. It shows each message immediately, then swaps in the saved copy from the server's ack. It also handles typing events and marks messages read.
+- `hooks/useConversations.js` backs the inbox (`GET /api/v1/messages/conversations`).
+- Pages: `pages/Messages/Messages.jsx` is the inbox and `pages/Messages/Chat.jsx` is `/messages/:userId`. The Message button on a profile links to the chat.
+- `useLogout` calls `closeSocket()`.
 
 **Theme and PWA.** `main.jsx` sets up the Chakra theme (dark mode by default, black body background) and registers `/sw.js`. `vite.config.js` also configures `vite-plugin-pwa`, whose manifest still carries leftover "Amazon React" naming.
 
