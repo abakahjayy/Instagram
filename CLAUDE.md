@@ -59,6 +59,15 @@ Redux Toolkit, react-query, formik, styled-components and tailwind are in `packa
 - Pages: `pages/Messages/Messages.jsx` is the inbox and `pages/Messages/Chat.jsx` is `/messages/:userId`. The Message button on a profile links to the chat.
 - `useLogout` calls `closeSocket()`.
 
+**Notifications, search, saved.**
+- `hooks/useNotifications.js` `useNotificationsSync` is mounted once by `PageLayout`. It loads `GET /api/v1/notifications` into `store/useNotificationStore.js` and adds live `notification` socket events. The sidebar and mobile top bar read their unread badge from that store, and `/notifications` marks everything read.
+- `/search` searches people as you type (`GET /api/v1/users/search?q=`). With an empty query it shows an Explore grid of all posts.
+- The profile tabs are Posts, Saved and Likes. Saved (`GET /posts/saved`, auth) appears only on your own profile; Likes uses `GET /posts/liked/:userId`.
+- The bookmark in `PostFooter` goes through `hooks/useSavePost.js`, which mirrors `saved` onto the store's user.
+- `components/Profile/PostGrid.jsx` is the shared 3-column grid plus full-post modal. It has no delete button, because saved and liked posts can belong to anyone.
+
+**Responsive layout.** Below the `md` breakpoint, `PageLayout` hides the sidebar and renders `components/NavBar/MobileNav.jsx` instead: a top bar and a fixed bottom tab bar. The bottom bar is hidden inside an open chat, and phones log out from their own profile header. `FeedPost` handles double-tap-to-like with its own tap timer, not `onDoubleClick`, so it also works on touch.
+
 **Theme and PWA.** `main.jsx` sets up the Chakra theme (dark mode by default, black body background) and registers `/sw.js`. `vite.config.js` also configures `vite-plugin-pwa`, whose manifest still carries leftover "Amazon React" naming.
 
 ## Dead or legacy code

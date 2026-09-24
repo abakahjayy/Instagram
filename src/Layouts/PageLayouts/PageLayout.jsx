@@ -1,11 +1,12 @@
-import React from "react";
+
 import Navbar from "../../components/NavBar/Navbar.jsx";
-import Footer from "../../components/trys/Footer.jsx";
 import { Flex,Box,Spinner,Link } from "@chakra-ui/react";
 import { FiBriefcase } from "react-icons/fi";
 import {SideBar} from '../../components/SideBar/SideBar.jsx'
+import { MobileBottomNav, MobileTopBar, MOBILE_BOTTOM_BAR_H } from "../../components/NavBar/MobileNav.jsx";
 import { useLocation } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore.js";
+import { useNotificationsSync } from "../../hooks/useNotifications.js";
 
 const PageLayout = ({ authUser, onLogout, children }) => {
     const {isLoading } = useAuthStore()
@@ -14,12 +15,16 @@ const PageLayout = ({ authUser, onLogout, children }) => {
 	const checkingUserIsAuth = !user && isLoading;
 	const canRenderSidebar = pathname !== "/auth"&&user;
     const canRenderNavbar =pathname !== "/auth"&&!user;
+    // An open chat is full-screen on phones, like the Instagram app.
+    const inChat = pathname.startsWith("/messages/");
+    const showMobileBars = canRenderSidebar && !inChat;
+    useNotificationsSync(!!canRenderSidebar);
     if (checkingUserIsAuth) return <PageLayoutSpinner />;
     return (
             <Flex flexDir={canRenderNavbar ? "column" : "row"}>
-                {/* side bar on the left */}
+                {/* side bar on the left - tablet and up; phones get MobileTopBar/MobileBottomNav */}
                 {canRenderSidebar?(
-                <Box w={{base:'70px',md:'240px'}}>
+                <Box w={'240px'} flexShrink={0} display={{ base: "none", md: "block" }}>
                     <SideBar authUser={authUser} onLogout={onLogout}/>
                 </Box>):null
                 }
@@ -27,19 +32,21 @@ const PageLayout = ({ authUser, onLogout, children }) => {
                 {canRenderNavbar ? <Navbar authUser={authUser} onLogout={onLogout}  /> : null}
 
                 {/* content on the right */}
-                <Box flex={1} w={{base:'calc(100%-70px)',md:'calc(100%-240px)'}}>
+                <Box flex={1} minW={0} pb={{ base: showMobileBars ? MOBILE_BOTTOM_BAR_H : 0, md: 0 }}>
+                    {showMobileBars && <MobileTopBar />}
                     {children}
                 </Box>
+                {showMobileBars && <MobileBottomNav authUser={authUser} onLogout={onLogout} />}
 
                 {/* Portfolio badge - this is a clone/demo project */}
                 <Link
                     href="https://portfolio-8jmo.onrender.com/"
                     isExternal
                     position="fixed"
-                    bottom={4}
+                    bottom={{ base: showMobileBars ? "68px" : 4, md: 4 }}
                     right={4}
                     zIndex={1000}
-                    display="flex"
+                    display={inChat ? { base: "none", md: "flex" } : "flex"}
                     alignItems="center"
                     gap={1}
                     px={3}

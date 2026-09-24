@@ -11,6 +11,8 @@ import useLogout from "./hooks/useLogout.js";
 import { Flex, Spinner } from "@chakra-ui/react";
 import useShowToast from "./hooks/useShowToast.js";
 import ChatPage from "./pages/Messages/Chat.jsx";
+import SearchPage from "./pages/Search/Search.jsx";
+import NotificationsPage from "./pages/Notifications/Notifications.jsx";
 
 
 export default function App(){
@@ -82,6 +84,22 @@ export default function App(){
                     </PageLayout>
                     
                 </>
+            ),
+        },
+        {
+            path: '/search',
+            element: (
+                <PageLayout authUser={authUser} onLogout={handleLogout}>
+                    {authUser ? <SearchPage /> : <Navigate to="/auth" />}
+                </PageLayout>
+            ),
+        },
+        {
+            path: '/notifications',
+            element: (
+                <PageLayout authUser={authUser} onLogout={handleLogout}>
+                    {authUser ? <NotificationsPage /> : <Navigate to="/auth" />}
+                </PageLayout>
             ),
         },
         {

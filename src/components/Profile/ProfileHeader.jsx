@@ -46,6 +46,15 @@ export default function ProfileHeader({authUser,onLogout,username,owner}) {
                 >
                   Edit Profile
                 </Button>
+                {/* Phones have no sidebar, so logout lives here (like Instagram's profile menu). */}
+                <Button
+                  display={{ base: "inline-flex", md: "none" }}
+                  variant={"outline"}
+                  size={"xs"}
+                  onClick={() => onLogout?.(user._id)}
+                >
+                  Log out
+                </Button>
               </Flex>
             )}
             {visitingAnotherProfileAndAuth && (

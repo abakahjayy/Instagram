@@ -107,17 +107,19 @@ export default function ProfilePost({post}) {
 
 
         {/* Adding the Modal here */}
-        <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{ base: "3xl", md: "5xl" }}>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{ base: "full", md: "5xl" }} scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
           <ModalBody bg={"black"} pb={5}>
             <Flex
               gap='4'
-              w={{ base: "90%", sm: "70%", md: "full" }}
+              direction={{ base: "column", md: "row" }}
+              w={{ base: "full", md: "full" }}
               mx={"auto"}
-              maxH={"90vh"}
+              maxH={{ base: "none", md: "90vh" }}
               minH={"50vh"}
+              pt={{ base: 8, md: 0 }}
             >
               {/* Image */}
               <Flex
@@ -134,7 +136,7 @@ export default function ProfilePost({post}) {
               </Flex>
 
               {/* Second Half Of the Modal */}
-              <Flex flex={1} flexDir={"column"} px={10} display={{ base: "none", md: "flex" }}>
+              <Flex flex={1} flexDir={"column"} px={{ base: 1, md: 10 }}>
                 <Flex alignItems={"center"} justifyContent={"space-between"}>
                   <Flex alignItems={"center"} gap={4}>
                     <Avatar src={avatarUrl} size={"sm"} name={userProfile?.user?.username} />

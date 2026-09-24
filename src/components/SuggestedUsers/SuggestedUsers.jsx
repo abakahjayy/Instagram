@@ -31,7 +31,7 @@ export default function SuggestedUsers({authUser,onLogout}) {
 
             <Box fontSize={12} color={'gray.500'} mt={5}>
                 Copyright &copy; {new Date().getFullYear()} Built By{" "}
-				<Link href='https://abakahjay.github.io/web_project/' target='_blank' color='blue.500' fontSize={14} alignSelf={'start'}>
+				<Link href='https://portfolio-8jmo.onrender.com/' isExternal color='blue.500' fontSize={14} alignSelf={'start'}>
                     Abakah Joshua
 				</Link>
             </Box>

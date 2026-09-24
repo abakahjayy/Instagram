@@ -6,13 +6,18 @@ import useAuthStore from "../../store/useAuthStore";
 import useLikePost from "../../hooks/useLikePost";
 import { timeAgo } from "../../utils/timeAgo";
 import CommentsModal from "../Modals/CommentsModal";
+import useSavePost from "../../hooks/useSavePost";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 
-const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
+// `likeState` lets FeedPost share one useLikePost with its double-tap-to-like media.
+const PostFooter = ({ post, isProfilePage, creatorProfile, likeState }) => {
 	const { isCommenting, handlePostComment } = usePostComment();
 	const [comment, setComment] = useState("");
 	const authUser = useAuthStore((state) => state.user);
 	const commentRef = useRef(null);
-	const { handleLikePost, isLiked, likes } = useLikePost(post);
+	const ownLikeState = useLikePost(post);
+	const { handleLikePost, isLiked, likes } = likeState || ownLikeState;
+	const { isSaved, toggleSave } = useSavePost(post);
 	const { isOpen, onOpen, onClose } = useDisclosure();
     // console.log(post, isProfilePage, creatorProfile)
 
@@ -30,6 +35,16 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 
 				<Box cursor={"pointer"} fontSize={18} onClick={() => commentRef.current.focus()}>
 					<CommentLogo />
+				</Box>
+
+				<Box
+					as='button'
+					aria-label={isSaved ? "Remove from saved" : "Save"}
+					ml='auto'
+					fontSize={22}
+					onClick={toggleSave}
+				>
+					{isSaved ? <BsBookmarkFill /> : <BsBookmark />}
 				</Box>
 			</Flex>
 			<Text fontWeight={600} fontSize={"sm"}>

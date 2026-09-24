@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Image } from "@chakra-ui/react";
 import { BsPlayFill } from "react-icons/bs";
 import { imageUrl, isVideoPost, mediaUrl } from "../../utils/media";
@@ -8,11 +8,22 @@ import { imageUrl, isVideoPost, mediaUrl } from "../../utils/media";
 //   variant="thumb" - square grid tile; videos show their first frame + play badge
 //   variant="full"  - post modal; videos play with sound controls
 export default function PostMedia({ post, variant = "feed" }) {
+	// Posts uploaded before the backend recorded mediaType default to 'image' even when
+	// the file is a video - if the <img> can't decode it, fall back to the video player.
+	const [imageFailed, setImageFailed] = useState(false);
 	if (!post?.postId) return null;
 
-	if (!isVideoPost(post)) {
+	if (!isVideoPost(post) && !imageFailed) {
 		const fit = variant === "thumb" ? { w: "100%", h: "100%", objectFit: "cover" } : {};
-		return <Image src={imageUrl(post.postId)} alt={post.caption || "Post"} loading='lazy' {...fit} />;
+		return (
+			<Image
+				src={imageUrl(post.postId)}
+				alt={post.caption || "Post"}
+				loading='lazy'
+				onError={() => setImageFailed(true)}
+				{...fit}
+			/>
+		);
 	}
 
 	if (variant === "thumb") {
