@@ -47,6 +47,11 @@ export default function ProfileHeader({authUser,onLogout,username,owner}) {
               <Button {...buttonProps} bg='whiteAlpha.200' _hover={{ bg: "whiteAlpha.300" }} onClick={shareProfile}>
                 Share profile
               </Button>
+              {user.role === "admin" && (
+                <Button {...buttonProps} as={RouterLink} to='/admin/updates' bg='whiteAlpha.200' _hover={{ bg: "whiteAlpha.300" }}>
+                  Send update
+                </Button>
+              )}
               {/* Phones have no sidebar, so logout lives here. */}
               <Button {...buttonProps} display={{ base: "inline-flex", md: "none" }} variant='outline' onClick={() => onLogout?.(user._id)}>
                 Log out

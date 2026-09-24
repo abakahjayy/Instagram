@@ -36,10 +36,15 @@ const useConversations = () => {
 
 		const socket = getSocket(token);
 		const refresh = () => load();
+		// new, edited and unsent messages all change the inbox preview
 		socket?.on("receiveMessage", refresh);
+		socket?.on("messageUpdated", refresh);
+		socket?.on("messageDeleted", refresh);
 		return () => {
 			controller.abort();
 			socket?.off("receiveMessage", refresh);
+			socket?.off("messageUpdated", refresh);
+			socket?.off("messageDeleted", refresh);
 		};
 	}, [load, token]);
 

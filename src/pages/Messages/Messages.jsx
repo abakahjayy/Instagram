@@ -49,7 +49,7 @@ export default function MessagesPage() {
 								<Text fontWeight={unread ? "bold" : "semibold"}>{user.username}</Text>
 								<Text color={unread ? "whiteAlpha.900" : "gray.400"} fontSize='sm' noOfLines={1}>
 									{lastMessage.sender === myId ? "You: " : ""}
-									{lastMessage.message} · {timeAgo(new Date(lastMessage.timestamp).getTime())}
+									{lastMessage.type === "voice" ? "🎤 Voice message" : lastMessage.message} · {timeAgo(new Date(lastMessage.timestamp).getTime())}
 								</Text>
 							</Box>
 							{unread > 0 && (

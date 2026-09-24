@@ -14,6 +14,9 @@ import {
 	ModalHeader,
 	ModalOverlay,
 	Stack,
+	Box,
+	Switch,
+	Text,
 } from "@chakra-ui/react";
 import useAuthStore from "../../store/useAuthStore";
 import { useRef, useState } from "react";
@@ -21,7 +24,8 @@ import useShowToast from "../../hooks/useShowToast";
 import { avatarUrl } from "../../utils/media";
 import usePreviewImg from "../../hooks/usePreviewing";
 import useEditProfile from "../../hooks/useEditProfile";
-const tokens = JSON.parse(localStorage.getItem("user-info"))?.token;
+import API from "../../utils/api";
+import { getAuthToken } from "../../utils/auth";
 
 const EditProfile = ({ isOpen, onClose}) => {
 	const {editProfile, isUpdating }=useEditProfile()
@@ -33,6 +37,23 @@ const EditProfile = ({ isOpen, onClose}) => {
 	const fileRef = useRef(null);
 	const {selectedFile, handleImageChange,formDatas, setSelectedFile }=usePreviewImg()
 	const showToast = useShowToast();
+	const setAuthUser = useAuthStore((state) => state.setAuthUser);
+	const [savingEmailPref, setSavingEmailPref] = useState(false);
+	const emailOn = user.emailNotifications !== false;
+
+	// Saves straight away, like Instagram's settings toggles.
+	const toggleEmails = async (on) => {
+		setSavingEmailPref(true);
+		try {
+			await API.patch("/api/v1/instagram/settings/email", { emailNotifications: on }, { headers: { Authorization: `Bearer ${getAuthToken()}` } });
+			setAuthUser({ ...user, emailNotifications: on });
+			showToast(on ? "Emails on" : "Emails off", on ? "We'll email you about followers, comments, messages and updates." : "You won't get emails from us.", "success", 2000);
+		} catch (error) {
+			showToast("Error", error.response?.data?.error || error.message, "error");
+		} finally {
+			setSavingEmailPref(false);
+		}
+	};
 
 	// console.log(selectedFile)
 	const [inputs, setInputs] = useState({
@@ -43,7 +64,8 @@ const EditProfile = ({ isOpen, onClose}) => {
 	});
 	const handleEditProfile = async () => {
 		try {
-			await editProfile(inputs, selectedFile,formDatas,username,tokens);
+			// read the token now - a module-level read went stale after logging in
+			await editProfile(inputs, selectedFile,formDatas,username,getAuthToken());
 			setSelectedFile(null);
 			onClose();
 		} catch (error) {
@@ -114,6 +136,14 @@ const EditProfile = ({ isOpen, onClose}) => {
 										value={inputs.bio || authUser.bio}
 										onChange={(e) => setInputs({ ...inputs, bio: e.target.value })}
 									/>
+								</FormControl>
+
+								<FormControl display='flex' alignItems='center' justifyContent='space-between' gap={4}>
+									<Box>
+										<FormLabel htmlFor='email-notifications' fontSize={"sm"} mb={0}>Email notifications</FormLabel>
+										<Text fontSize='xs' color='gray.500'>New followers, comments, messages while you&apos;re away, and app updates</Text>
+									</Box>
+									<Switch id='email-notifications' colorScheme='blue' isChecked={emailOn} isDisabled={savingEmailPref} onChange={(e) => toggleEmails(e.target.checked)} />
 								</FormControl>
 
 								<Stack spacing={6} direction={["column", "row"]}>

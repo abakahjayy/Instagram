@@ -5,6 +5,7 @@ import { BiLogOut } from "react-icons/bi";
 // import useLogout from "../../hooks/useLogout";
 import SidebarItems from "./SidebarItems";
 import useLogout from '../../hooks/useLogout.js';
+import GetAppLink from './GetAppLink';
 export function SideBar({ authUser, onLogout}){
     const user=authUser?authUser.user||authUser:''
 
@@ -43,7 +44,10 @@ export function SideBar({ authUser, onLogout}){
                     </Flex>
 
 
-                    {/* Logout */}
+                    {/* Get the app + Logout, pinned to the bottom */}
+                    <Box mt={"auto"}>
+                        <GetAppLink />
+                    </Box>
                     <Tooltip
 					hasArrow
 					label={"Logout"}
@@ -60,7 +64,7 @@ export function SideBar({ authUser, onLogout}){
 						borderRadius={6}
 						p={2}
 						w={{ base: 10, xl: "full" }}
-						mt={"auto"}
+						mt={-6}
 						justifyContent={{ base: "center", xl: "flex-start" }}
 					>
 						<BiLogOut size={25} />

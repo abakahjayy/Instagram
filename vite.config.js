@@ -25,22 +25,32 @@ export default defineConfig({
           },
         ],
       },
+      // Installable on Android, Windows, macOS, ChromeOS (Chrome/Edge "Install") and
+      // iPhone/iPad (Safari "Add to Home Screen" - uses the apple-touch-icon in index.html).
+      // Icons come from scripts/generate-icons.mjs.
       manifest: {
+        id: '/',
         name: 'Instagram',
         short_name: 'Instagram',
-        description: 'Your app description',
-        theme_color: '#ffffff',
+        description: 'Share photos, videos, stories and reels, and chat with friends.',
+        start_url: '/?source=app',
+        scope: '/',
+        display: 'standalone',
+        display_override: ['window-controls-overlay', 'standalone'],
+        orientation: 'any',
+        theme_color: '#000000',
+        background_color: '#000000',
+        categories: ['social', 'photo'],
         icons: [
-          {
-            src: 'icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+        // long-press the app icon on Android / right-click in the Windows taskbar
+        shortcuts: [
+          { name: 'Messages', url: '/messages', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'Reels', url: '/reels', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'Notifications', url: '/notifications', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
         ],
       },
     }),

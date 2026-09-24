@@ -5,8 +5,11 @@ import { getSocket } from "../utils/socket";
 import useAuthStore from "../store/useAuthStore";
 import useShowToast from "./useShowToast";
 
+const auth = () => ({ Authorization: `Bearer ${getAuthToken()}` });
+
 // A live one-to-one conversation with `otherUserId`: loads the history over REST,
 // then sends/receives over socket.io. The backend takes the sender from the JWT.
+// Also: edit + unsend your own messages, and voice notes (REST upload).
 const useChat = (otherUserId) => {
 	const authUser = useAuthStore((state) => state.user);
 	const myId = getAuthUserId(authUser);
@@ -18,11 +21,14 @@ const useChat = (otherUserId) => {
 	const typingTimer = useRef(null);
 	const lastTypingSent = useRef(0);
 
+	const belongsHere = useCallback(
+		(m) => (m.sender === otherUserId && m.recipient === myId) || (m.sender === myId && m.recipient === otherUserId),
+		[myId, otherUserId]
+	);
+
 	const markRead = useCallback(() => {
-		API.patch(`/api/v1/messages/conversations/${otherUserId}/read`, null, {
-			headers: { Authorization: `Bearer ${token}` },
-		}).catch(() => {});
-	}, [otherUserId, token]);
+		API.patch(`/api/v1/messages/conversations/${otherUserId}/read`, null, { headers: auth() }).catch(() => {});
+	}, [otherUserId]);
 
 	// History
 	useEffect(() => {
@@ -30,10 +36,7 @@ const useChat = (otherUserId) => {
 		const controller = new AbortController();
 		setIsLoading(true);
 		setMessages([]);
-		API.get(`/api/v1/messages/${myId}/${otherUserId}`, {
-			signal: controller.signal,
-			headers: { Authorization: `Bearer ${token}` },
-		})
+		API.get(`/api/v1/messages/${myId}/${otherUserId}`, { signal: controller.signal, headers: auth() })
 			.then(({ data }) => {
 				setMessages(data);
 				markRead();
@@ -52,15 +55,18 @@ const useChat = (otherUserId) => {
 		if (!socket || !otherUserId) return;
 
 		const onMessage = (message) => {
-			const fromOther = message.sender === otherUserId;
-			const fromMeToOther = message.sender === myId && message.recipient === otherUserId;
-			if (!fromOther && !fromMeToOther) return; // belongs to another conversation
+			if (!belongsHere(message)) return; // another conversation
 			setMessages((prev) => (prev.some((m) => m._id === message._id) ? prev : [...prev, message]));
-			if (fromOther) {
+			if (message.sender === otherUserId) {
 				setIsOtherTyping(false);
 				markRead();
 			}
 		};
+		const onUpdated = (message) => {
+			if (!belongsHere(message)) return;
+			setMessages((prev) => prev.map((m) => (m._id === message._id ? message : m)));
+		};
+		const onDeleted = ({ _id }) => setMessages((prev) => prev.filter((m) => m._id !== _id));
 		const onTyping = ({ sender }) => {
 			if (sender !== otherUserId) return;
 			setIsOtherTyping(true);
@@ -69,13 +75,17 @@ const useChat = (otherUserId) => {
 		};
 
 		socket.on("receiveMessage", onMessage);
+		socket.on("messageUpdated", onUpdated);
+		socket.on("messageDeleted", onDeleted);
 		socket.on("typing", onTyping);
 		return () => {
 			socket.off("receiveMessage", onMessage);
+			socket.off("messageUpdated", onUpdated);
+			socket.off("messageDeleted", onDeleted);
 			socket.off("typing", onTyping);
 			clearTimeout(typingTimer.current);
 		};
-	}, [token, myId, otherUserId, markRead]);
+	}, [token, otherUserId, belongsHere, markRead]);
 
 	const sendMessage = useCallback(
 		(text) => {
@@ -103,6 +113,65 @@ const useChat = (otherUserId) => {
 		[token, myId, otherUserId, showToast]
 	);
 
+	const editMessage = useCallback(
+		async (messageId, text) => {
+			const message = text.trim();
+			if (!message) return;
+			const before = messages.find((m) => m._id === messageId);
+			setMessages((prev) => prev.map((m) => (m._id === messageId ? { ...m, message, editedAt: new Date().toISOString() } : m)));
+			try {
+				const { data } = await API.patch(`/api/v1/messages/${messageId}/edit`, { message }, { headers: auth() });
+				setMessages((prev) => prev.map((m) => (m._id === messageId ? data : m)));
+			} catch (error) {
+				if (before) setMessages((prev) => prev.map((m) => (m._id === messageId ? before : m)));
+				showToast("Couldn't edit", error.response?.data?.error || error.message, "error");
+			}
+		},
+		[messages, showToast]
+	);
+
+	// "Unsend": removes the message for both people.
+	const unsendMessage = useCallback(
+		async (messageId) => {
+			const before = messages;
+			setMessages((prev) => prev.filter((m) => m._id !== messageId));
+			try {
+				await API.delete(`/api/v1/messages/${messageId}`, { headers: auth() });
+			} catch (error) {
+				setMessages(before);
+				showToast("Couldn't unsend", error.response?.data?.error || error.message, "error");
+			}
+		},
+		[messages, showToast]
+	);
+
+	const sendVoice = useCallback(
+		async (blob, duration) => {
+			const tempId = `pending-voice-${Date.now()}`;
+			setMessages((prev) => [
+				...prev,
+				{ _id: tempId, sender: myId, recipient: otherUserId, type: "voice", duration, timestamp: new Date().toISOString(), pending: true },
+			]);
+			try {
+				const form = new FormData();
+				form.append("recipient", otherUserId);
+				form.append("duration", String(duration));
+				const ext = blob.type.includes("mp4") ? "m4a" : blob.type.includes("ogg") ? "ogg" : "webm";
+				form.append("audio", blob, `voice.${ext}`);
+				const { data } = await API.post("/api/v1/messages/voice", form, { headers: auth() });
+				setMessages((prev) => {
+					// the socket echo may have arrived first
+					const withoutTemp = prev.filter((m) => m._id !== tempId);
+					return withoutTemp.some((m) => m._id === data._id) ? withoutTemp : [...withoutTemp, data];
+				});
+			} catch (error) {
+				setMessages((prev) => prev.map((m) => (m._id === tempId ? { ...m, pending: false, failed: true } : m)));
+				showToast("Voice message not sent", error.response?.data?.error || error.message, "error");
+			}
+		},
+		[myId, otherUserId, showToast]
+	);
+
 	// Throttled so we don't emit on every keystroke.
 	const notifyTyping = useCallback(() => {
 		const now = Date.now();
@@ -111,7 +180,7 @@ const useChat = (otherUserId) => {
 		getSocket(token)?.emit("typing", { recipient: otherUserId });
 	}, [token, otherUserId]);
 
-	return { myId, messages, isLoading, isOtherTyping, sendMessage, notifyTyping };
+	return { myId, messages, isLoading, isOtherTyping, sendMessage, editMessage, unsendMessage, sendVoice, notifyTyping };
 };
 
 export default useChat;

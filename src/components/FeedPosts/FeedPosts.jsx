@@ -1,6 +1,7 @@
 import { Container,Flex, Skeleton, SkeletonCircle, VStack,Box, Text } from "@chakra-ui/react"
 import FeedPost from "./FeedPost"
 import StoriesBar from "../Stories/StoriesBar"
+import GetAppBanner from "../NavBar/GetAppBanner"
 import { Link as RouterLink } from "react-router-dom"
 import { Button } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
@@ -13,6 +14,7 @@ export default function FeedPosts({authUser}) {
     // console.log(user)
     return (
         <Container maxW={'470px'} py={0} px={0}>
+            <GetAppBanner />
             <StoriesBar />
 
             {/* For the Loading Skeleton of Instagram */}

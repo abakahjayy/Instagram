@@ -1,6 +1,7 @@
 import { VStack,Flex, Text,Button, Box ,Link, SkeletonCircle,Skeleton} from "@chakra-ui/react"
 import SuggestedUser from "./SuggestedUser"
 import SuggestedHeader from "./SuggestedHeader"
+import { Link as RouterLink } from "react-router-dom"
 import useAuthStore from "../../store/useAuthStore";
 import useGetSuggestedUsers from "../../hooks/useGetSuggestedUsers"
 
@@ -29,7 +30,10 @@ export default function SuggestedUsers({authUser,onLogout}) {
 				<SuggestedUser user={user} setUser={setAuthUser} key={user._id} />
 			))}
 
-            <Box fontSize={12} color={'gray.500'} mt={5}>
+            <Link as={RouterLink} to='/download' fontSize={12} color={'gray.400'} alignSelf='start' mt={3}>
+                Get the app
+            </Link>
+            <Box fontSize={12} color={'gray.500'} mt={2}>
                 Copyright &copy; {new Date().getFullYear()} Built By{" "}
 				<Link href='https://portfolio-8jmo.onrender.com/' isExternal color='blue.500' fontSize={14} alignSelf={'start'}>
                     Abakah Joshua

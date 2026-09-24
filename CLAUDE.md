@@ -75,6 +75,18 @@ Redux Toolkit, react-query, formik, styled-components and tailwind are in `packa
 
 **Breakpoints.** Phones (base) get MobileNav; tablets (md–lg) get a 72px icon rail; `xl` and up get the 240px sidebar with labels. Every `SideBar/*` item switches between collapsed and labelled at `xl`, not `md`, and PageLayout sets the rail width to match.
 
+**Installable app / downloads.**
+- It's a PWA; there are no store builds. The manifest is in `vite.config.js`, and the icons in `public/icons` come from `node scripts/generate-icons.mjs`.
+- `utils/install.js` catches `beforeinstallprompt` at startup (`main.jsx` imports it) and does the device detection. `/download` shows a one-tap Install button where Chrome or Edge offer it, and Add to Home Screen or Add to Dock steps for Safari.
+- "Get the app" links: the sidebar (`GetAppLink`), the phone feed banner (`GetAppBanner`, dismissed via localStorage), the auth page and the suggested-users footer. All of them are hidden inside the installed app.
+
+**Messages extras.**
+- `useChat` handles live `messageUpdated` and `messageDeleted` socket events, plus edit (PATCH `/messages/:id/edit`), unsend (DELETE `/messages/:id`) and voice notes (POST `/messages/voice`, multipart field `audio`).
+- `useVoiceRecorder` picks webm/opus or mp4 (Safari) and caps a note at 60 s.
+- Your own messages have a menu that opens on hover (the "⋯" button), long-press or right-click.
+
+**Emails.** The email on/off switch is in EditProfile (PATCH `/api/v1/instagram/settings/email`). `/admin/updates` sends an app-update email to everyone; it's only for `user.role === "admin"`, set with the backend's `scripts/makeInstagramAdmin.js`.
+
 **Theme and PWA.** `main.jsx` sets up the Chakra theme (dark mode by default, black body background) and registers `/sw.js`. `vite.config.js` also configures `vite-plugin-pwa`, whose manifest still carries leftover "Amazon React" naming.
 
 ## Dead or legacy code

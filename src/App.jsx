@@ -16,6 +16,8 @@ import SearchPage from "./pages/Search/Search.jsx";
 import NotificationsPage from "./pages/Notifications/Notifications.jsx";
 import ReelsPage from "./pages/Reels/Reels.jsx";
 import PostPage from "./pages/Post/PostPage.jsx";
+import DownloadPage from "./pages/Download/Download.jsx";
+import SendUpdatePage from "./pages/Admin/SendUpdate.jsx";
 
 
 export default function App(){
@@ -99,6 +101,23 @@ export default function App(){
             element: (
                 <PageLayout authUser={authUser} onLogout={handleLogout}>
                     {authUser ? <SearchPage /> : <Navigate to="/auth" />}
+                </PageLayout>
+            ),
+        },
+        {
+            // public "Get the app" page - shareable, works signed out
+            path: '/download',
+            element: (
+                <PageLayout authUser={authUser} onLogout={handleLogout}>
+                    <DownloadPage />
+                </PageLayout>
+            ),
+        },
+        {
+            path: '/admin/updates',
+            element: (
+                <PageLayout authUser={authUser} onLogout={handleLogout}>
+                    {authUser ? <SendUpdatePage /> : <Navigate to="/auth" />}
                 </PageLayout>
             ),
         },
