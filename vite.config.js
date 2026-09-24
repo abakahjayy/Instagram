@@ -19,7 +19,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
-            urlPattern: ({ request }) => request.mode === 'navigate',
+            // pages only - never the app downloads (APK) in public/downloads
+            urlPattern: ({ request, url }) => request.mode === 'navigate' && !url.pathname.startsWith('/downloads/'),
             handler: 'NetworkFirst',
             options: { cacheName: 'pages', networkTimeoutSeconds: 4 },
           },

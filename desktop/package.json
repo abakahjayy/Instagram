@@ -1,0 +1,43 @@
+{
+  "name": "instagram-desktop",
+  "productName": "Instagram",
+  "version": "1.0.0",
+  "description": "Instagram for Windows",
+  "author": "Abakah Joshua",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --x64"
+  },
+  "build": {
+    "appId": "com.instagrammmm.app",
+    "productName": "Instagram",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "build/icon.png",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Instagram",
+      "runAfterFinish": true,
+      "artifactName": "Instagram-Setup.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  }
+}

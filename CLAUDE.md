@@ -76,9 +76,15 @@ Redux Toolkit, react-query, formik, styled-components and tailwind are in `packa
 **Breakpoints.** Phones (base) get MobileNav; tablets (md–lg) get a 72px icon rail; `xl` and up get the 240px sidebar with labels. Every `SideBar/*` item switches between collapsed and labelled at `xl`, not `md`, and PageLayout sets the rail width to match.
 
 **Installable app / downloads.**
-- It's a PWA; there are no store builds. The manifest is in `vite.config.js`, and the icons in `public/icons` come from `node scripts/generate-icons.mjs`.
-- `utils/install.js` catches `beforeinstallprompt` at startup (`main.jsx` imports it) and does the device detection. `/download` shows a one-tap Install button where Chrome or Edge offer it, and Add to Home Screen or Add to Dock steps for Safari.
-- "Get the app" links: the sidebar (`GetAppLink`), the phone feed banner (`GetAppBanner`, dismissed via localStorage), the auth page and the suggested-users footer. All of them are hidden inside the installed app.
+- The `/download` page detects the device and puts that device's option first.
+- **Android:** a signed Trusted Web Activity APK (`com.instagrammmm.app`) at `public/downloads/Instagram.apk`, made with PWABuilder's packaging service. `public/.well-known/assetlinks.json` must match the signing key; the key lives in "Instagram App Packages" on the owner's Desktop and is never committed.
+- **Windows:** `Instagram-Setup.exe` is built from `desktop/` (Electron + electron-builder NSIS; `npm run dist`) and published as a GitHub Release asset on abakahjayy/Instagram. The page links to `/releases/latest/download/Instagram-Setup.exe`. The app window loads the live site and uses a plain Chrome user agent, because Google blocks sign-in from "Electron".
+- **iPhone, iPad and Mac:** installed from the browser as a PWA. The manifest is in `vite.config.js`, the icons come from `scripts/generate-icons.mjs`, and `utils/install.js` catches `beforeinstallprompt` for the "install from this browser" button.
+- Links on the page use the public site address, never `window.location` (it showed localhost during local runs).
+- **Building the .exe on Windows** fails when unpacking winCodeSign's macOS symlinks without admin rights. Fix it by extracting the archive into the electron-builder cache as `winCodeSign-2.6.0`, ignoring the symlink errors.
+- "Get the app" links: the sidebar, the phone feed banner, the auth page and the suggested-users footer. All are hidden inside the installed app.
+
+**Sidebar height.** `SideBar.jsx` sets its spacing with CSS variables that shrink at `max-height` 800px and 650px, and it scrolls as a last resort, so "Get the app" and Logout stay reachable on short laptop screens.
 
 **Messages extras.**
 - `useChat` handles live `messageUpdated` and `messageDeleted` socket events, plus edit (PATCH `/messages/:id/edit`), unsend (DELETE `/messages/:id`) and voice notes (POST `/messages/voice`, multipart field `audio`).

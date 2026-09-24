@@ -49,3 +49,10 @@ rad.json
 #Test results file
 TestResults.xml
 >>>>>>> d43ec24aeffc24b9d29dc402da54665869b0c25d
+
+# Desktop app build output (published as a GitHub Release, not committed)
+desktop/release/
+# Android signing keys live in "Instagram App Packages" on the Desktop - never commit them
+*.keystore
+*.jks
+signing-key-info.txt
