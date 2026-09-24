@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import useConversations from "../../hooks/useConversations";
 import useAuthStore from "../../store/useAuthStore";
 import { getAuthUserId } from "../../utils/auth";
-import { imageUrl } from "../../utils/media";
+import { avatarUrl } from "../../utils/media";
 import { timeAgo } from "../../utils/timeAgo";
 
 export default function MessagesPage() {
@@ -44,7 +44,7 @@ export default function MessagesPage() {
 						p={3}
 					>
 						<Flex alignItems='center' gap={4}>
-							<Avatar src={imageUrl(user.profile_picture_id)} name={user.username} size='md' />
+							<Avatar src={avatarUrl(user)} referrerPolicy='no-referrer' name={user.username} size='md' />
 							<Box flex={1} minW={0}>
 								<Text fontWeight={unread ? "bold" : "semibold"}>{user.username}</Text>
 								<Text color={unread ? "whiteAlpha.900" : "gray.400"} fontSize='sm' noOfLines={1}>

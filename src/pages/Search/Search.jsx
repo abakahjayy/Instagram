@@ -3,7 +3,7 @@ import { Avatar, Box, Flex, Input, InputGroup, InputLeftElement, Link, Spinner, 
 import { SearchIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import API from "../../utils/api";
-import { imageUrl } from "../../utils/media";
+import { avatarUrl } from "../../utils/media";
 import PostGrid from "../../components/Profile/PostGrid";
 
 // /search - people search as you type; Explore grid of recent posts while the box is empty.
@@ -79,7 +79,7 @@ function UserResults({ users, isSearching }) {
 					p={2}
 				>
 					<Flex alignItems='center' gap={3}>
-						<Avatar size='md' src={imageUrl(u.profile_picture_id)} name={u.username} />
+						<Avatar size='md' src={avatarUrl(u)} referrerPolicy='no-referrer' name={u.username} />
 						<Box>
 							<Text fontWeight='bold' fontSize='sm'>
 								{u.username}

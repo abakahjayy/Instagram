@@ -8,9 +8,26 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Never serve a stale app: HTML always comes from the network (NetworkFirst, cache
+      // only as an offline fallback), and a new service worker takes over immediately and
+      // deletes the old precache. Without this the old bundle kept running after deploys.
+      workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
+        navigateFallback: null,
+        globPatterns: ['**/*.{js,css,ico,png,svg,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+            options: { cacheName: 'pages', networkTimeoutSeconds: 4 },
+          },
+        ],
+      },
       manifest: {
-        name: 'Amazon React',
-        short_name: 'Amazon',
+        name: 'Instagram',
+        short_name: 'Instagram',
         description: 'Your app description',
         theme_color: '#ffffff',
         icons: [

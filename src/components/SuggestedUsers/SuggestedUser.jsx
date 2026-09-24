@@ -1,12 +1,12 @@
 import { Flex,Avatar, VStack, Button, Link,Box } from "@chakra-ui/react";
-import { ProfileUrl } from "../../utils/imageUrl";
+import { avatarUrl } from "../../utils/media";
 import useFollowUser from "../../hooks/useFollowUser";
 import useAuthStore from "../../store/useAuthStore";
 import { Link as RouterLi } from "react-router-dom";
 
 export default function SuggestedUser({user,setUser}) {
     const { isFollowing, isUpdating, handleFollowUser } = useFollowUser(user?._id)
-    const url =user?.profile_picture_id?ProfileUrl(user.profile_picture_id):'';
+    const url = avatarUrl(user);
     const authUser = useAuthStore((state) => state.user);
     // console.log(user)
     // console.log(setUser)
@@ -26,7 +26,7 @@ export default function SuggestedUser({user,setUser}) {
     return (
         <Flex w={'full'} alignItems={'center'} justifyContent={'space-between'}>
             <Flex w={'full'} alignItems={'center'} gap={2}>
-                <Avatar src={url} size={'md'}/>
+                <Avatar src={url} name={user?.username} size={'md'} referrerPolicy='no-referrer'/>
                 <VStack spacing={2} alignItems={'flex-start'}>
                     <Link as={RouterLi} to={`/${user?.username}`}>
 						<Box fontSize={12} fontWeight={"bold"}>

@@ -2,14 +2,14 @@ import { Avatar, Flex, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { timeAgo } from "../../utils/timeAgo";
 import useProfileStore from "../../store/userProfileStore";
-import { ProfileUrl } from "../../utils/imageUrl";
+import { avatarUrl } from "../../utils/media";
 
 const Caption = ({ post }) => {
 	const userProfile = useProfileStore((state) => state.userProfile).user;
 	return (
 		<Flex gap={4}>
 			<Link to={`/${userProfile.username}`}>
-				<Avatar src={ProfileUrl(userProfile?.profile_picture_id)} size={"sm"} />
+				<Avatar src={avatarUrl(userProfile)} name={userProfile?.username} size={"sm"} referrerPolicy='no-referrer' />
 			</Link>
 			<Flex direction={"column"}>
 				<Flex gap={2} alignItems={"center"}>

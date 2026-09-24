@@ -20,7 +20,7 @@ import Comment from "../Comment/Comment";
 import Caption from "../Comment/Caption";
 import PostFooter from "../FeedPosts/PostFooter";
 import PostMedia from "../FeedPosts/PostMedia";
-import { imageUrl } from "../../utils/media";
+import { avatarUrl } from "../../utils/media";
 import useProfileStore from "../../store/userProfileStore";
 import useAuthStore from "../../store/useAuthStore";
 import useShowToast from "../../hooks/useShowToast";
@@ -35,7 +35,7 @@ export default function ProfilePost({post}) {
   const showToast = useShowToast();
 	const [isDeleting, setIsDeleting] = useState(false);
 	const deletePost = useProfileStore((state) => state.deletePost);
-  const avatarUrl = imageUrl(userProfile?.user?.profile_picture_id);
+  const creatorAvatar = avatarUrl(userProfile?.user);
   // console.log(post)
 
   const handleDeletePost = async () => {
@@ -139,7 +139,7 @@ export default function ProfilePost({post}) {
               <Flex flex={1} flexDir={"column"} px={{ base: 1, md: 10 }}>
                 <Flex alignItems={"center"} justifyContent={"space-between"}>
                   <Flex alignItems={"center"} gap={4}>
-                    <Avatar src={avatarUrl} size={"sm"} name={userProfile?.user?.username} />
+                    <Avatar src={creatorAvatar} referrerPolicy='no-referrer' size={"sm"} name={userProfile?.user?.username} />
                     <Text fontWeight={"bold"} fontSize={12}>
                       {userProfile?.user?.username}
                     </Text>

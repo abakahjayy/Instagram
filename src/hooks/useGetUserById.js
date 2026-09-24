@@ -1,15 +1,15 @@
 import API from "../utils/api";
 import useShowToast from "./useShowToast"; // Custom toast hook (if you have one)
 import { useEffect, useState } from "react";
-import { fetchImage } from "../utils/fetchImage"; // Adjust the path to your fetchImage file
+import { avatarUrl } from "../utils/media";
 
 export const useGetUserById = (userId) => {
   const showToast = useShowToast(); // Show toast notifications
   const [isLoading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState(null); // To store the profile image URL
-  const [imageLoading, setImageLoading] = useState(false); // To track image loading status
-  const [imageError, setImageError] = useState(null); // To track image errors
+  const [imageLoading] = useState(false); // To track image loading status
+  const [imageError] = useState(null); // To track image errors
 
   useEffect(() => {
     const controller = new AbortController();
@@ -26,19 +26,9 @@ export const useGetUserById = (userId) => {
         const user = users.user;
         setUserProfile(user);
 
-        // Fetch the profile image URL if the user has a profile_picture_id
-        if (user.profile_picture_id) {
-          setImageLoading(true);
-          try {
-            const imageURL = await fetchImage(user.profile_picture_id);
-            setProfileImageUrl(imageURL);
-          } catch (err) {
-            console.error("Failed to fetch profile image:", err);
-            setImageError(err);
-          } finally {
-            setImageLoading(false);
-          }
-        }
+        // Direct URL (uploaded picture, else Google photo) - the browser loads and caches it.
+        // The old per-avatar blob fetch never resolved for users without an upload.
+        setProfileImageUrl(avatarUrl(user) || null);
       } catch (err) {
         const message = err.response?.data?.error || err.message || "User not found";
         if (err.message === "canceled") {

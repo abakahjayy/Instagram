@@ -3,7 +3,7 @@ import { Avatar, Box, Flex, Heading, Image, Link, Skeleton, SkeletonCircle, Text
 import { Link as RouterLink } from "react-router-dom";
 import useNotificationStore from "../../store/useNotificationStore";
 import { useMarkNotificationsRead } from "../../hooks/useNotifications";
-import { imageUrl, mediaUrl } from "../../utils/media";
+import { avatarUrl, imageUrl, mediaUrl } from "../../utils/media";
 import { timeAgo } from "../../utils/timeAgo";
 
 const describe = (n) => {
@@ -67,7 +67,7 @@ export default function NotificationsPage() {
 								bg={n.read ? "transparent" : "whiteAlpha.100"}
 							>
 								<Link as={RouterLink} to={`/${n.actor.username}`}>
-									<Avatar size='md' src={imageUrl(n.actor.profile_picture_id)} name={n.actor.username} />
+									<Avatar size='md' src={avatarUrl(n.actor)} referrerPolicy='no-referrer' name={n.actor.username} />
 								</Link>
 								<Text flex={1} fontSize='sm' noOfLines={2}>
 									<Link as={RouterLink} to={`/${n.actor.username}`} fontWeight='bold'>

@@ -1,11 +1,11 @@
 import { Avatar, Box, Link, Tooltip } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import { ProfileUrl } from "../../utils/imageUrl";
+import { avatarUrl } from "../../utils/media";
 // import useAuthStore from "../../store/authStore";
 // let authUser;
 const ProfileLink = ({authUser,onLogout}) => {
 	const user=authUser.user?authUser.user:authUser
-	const url =user.profile_picture_id?ProfileUrl(user.profile_picture_id):'';
+	const url = avatarUrl(user);
 	// const authUser = useAuthStore((state) => state.user);
 
 	return (
@@ -29,7 +29,7 @@ const ProfileLink = ({authUser,onLogout}) => {
 				w={{ base: 10, md: "full" }}
 				justifyContent={{ base: "center", md: "flex-start" }}
 			>
-				<Avatar size={"sm"} src={url||''} />
+				<Avatar size={"sm"} src={url} name={user.username} referrerPolicy='no-referrer' />
 				<Box display={{ base: "none", md: "block" }}>Profile</Box>
 			</Link>
 		</Tooltip>

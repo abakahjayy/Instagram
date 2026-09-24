@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { timeAgo } from "../../utils/timeAgo";
 import { useGetUserById } from "../../hooks/useGetUserById";
-import { ProfileUrl } from "../../utils/imageUrl";
 export default function Comment({comment}) {
 
   const {
@@ -14,7 +13,6 @@ export default function Comment({comment}) {
     imageError, // Return any errors related to the image
     setUserProfile,
   }= useGetUserById(comment.user)
-  let url =ProfileUrl(userProfile?.profile_picture_id);
   // let url =userProfile?.profile_picture_id?ProfileUrl(userProfile?.profile_picture_id):''
 
   // userProfile&&console.log(userProfile)
@@ -23,7 +21,7 @@ export default function Comment({comment}) {
   if(userProfile)return(
     <Flex gap={4}>
     <Link to={`/${userProfile.username}`}>
-      {<Avatar src={profileImageUrl} size={"sm"} />}
+      {<Avatar src={profileImageUrl} name={userProfile.username} size={"sm"} referrerPolicy='no-referrer' />}
     </Link>
     <Flex direction={"column"}>
       <Flex gap={2} alignItems={"center"}>

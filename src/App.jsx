@@ -5,6 +5,7 @@ import PageLayout from "./Layouts/PageLayouts/PageLayout.jsx";
 import { useEffect, useState } from "react";
 import useAuthStore from "./store/useAuthStore.js";
 import API from "./utils/api";
+import { getAuthToken } from "./utils/auth";
 import {ProfilePage} from './pages/ProfilePage/ProfilePage';
 import MessagesPage from './pages/Messages/Messages';
 import useLogout from "./hooks/useLogout.js";
@@ -22,35 +23,40 @@ export default function App(){
     const setAuthUser= useAuthStore((state)=>state.setAuthUser) 
     const {user}= useAuthStore();
     const [loading, setLoading] = useState(true);
-    // console.log(user?.token)
-    // Fetch the authenticated user on initial load
+    // Load the signed-in user once per token (login, Google redirect, page load).
+    // Keyed on the token, not `user`: setAuthUser(data.user) changes `user`, and the old
+    // version re-ran with a token-less user, failed, and showed a stuck "Loading" toast.
+    const token = user ? getAuthToken() : null;
     useEffect(() => {
+        if (!token) {
+            setLoading(false);
+            return;
+        }
         const controller = new AbortController();
-        const fetchAuthUser = async () => {
-            if (user) {
-                try {
-                    const { data } = await API.get("/api/v1/auth/dashboard", {
-                        signal: controller.signal,
-                        headers: { Authorization: `Bearer ${user?.token}` }
-                    });
-                    setAuthUser(data.user);
-                    localStorage.setItem("user-info", JSON.stringify({user:data.user,token:user.token}));
-                } catch (error) {
-                    showToast("Loading",'', "loading",1000);
-                } finally {
-                    setLoading(false);
+        API.get("/api/v1/auth/dashboard", {
+            signal: controller.signal,
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(({ data }) => {
+                setAuthUser(data.user);
+                localStorage.setItem("user-info", JSON.stringify({ user: data.user, token }));
+            })
+            .catch((error) => {
+                if (error.message === "canceled") return;
+                if (error.response?.status === 401) {
+                    // expired/invalid token - start a fresh login
+                    localStorage.removeItem("user-info");
+                    setAuthUser(null);
+                    showToast("Session expired", "Please log in again", "info");
                 }
-            } else {
-                setLoading(false);
-            }
-        };
-
-        fetchAuthUser();
+                // anything else (e.g. Render cold start): keep the stored user
+            })
+            .finally(() => setLoading(false));
 
         return ()=>{//This is a cleanup function
             controller.abort();
         }
-    }, [user, setAuthUser]);
+    }, [token, setAuthUser, showToast]);
 
 
     const handleLogout = (userId) => {

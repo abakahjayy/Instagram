@@ -18,7 +18,7 @@ import {
 import useAuthStore from "../../store/useAuthStore";
 import { useRef, useState } from "react";
 import useShowToast from "../../hooks/useShowToast";
-import { ProfileUrl } from "../../utils/imageUrl";
+import { avatarUrl } from "../../utils/media";
 import usePreviewImg from "../../hooks/usePreviewing";
 import useEditProfile from "../../hooks/useEditProfile";
 const tokens = JSON.parse(localStorage.getItem("user-info"))?.token;
@@ -29,7 +29,7 @@ const EditProfile = ({ isOpen, onClose}) => {
 	const authUser = useAuthStore((state) => state.user);
 	const user=authUser.user?authUser.user:authUser
 	const username=user.username
-	const url =user.profile_picture_id?ProfileUrl(user.profile_picture_id):'';
+	const url = avatarUrl(user);
 	const fileRef = useRef(null);
 	const {selectedFile, handleImageChange,formDatas, setSelectedFile }=usePreviewImg()
 	const showToast = useShowToast();
@@ -68,7 +68,7 @@ const EditProfile = ({ isOpen, onClose}) => {
 									<Stack direction={["column", "row"]} spacing={6}>
 										<Center>
 											{selectedFile&&<Avatar size='xl' src={selectedFile} border={"2px solid white "} />}
-											{!selectedFile&&<Avatar size='xl'src={url} border={"2px solid white "} />}
+											{!selectedFile&&<Avatar size='xl' src={url} name={user.username} referrerPolicy='no-referrer' border={"2px solid white "} />}
 										</Center>
 										<Center w='full'>
 											<Button w='full' onClick={() => fileRef.current.click()}>

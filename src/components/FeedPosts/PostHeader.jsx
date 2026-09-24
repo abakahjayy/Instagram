@@ -2,13 +2,11 @@ import { Avatar, Box, Button, Flex, Skeleton, SkeletonCircle } from "@chakra-ui/
 import { Link } from "react-router-dom";
 import useFollowUser from "../../hooks/useFollowUser";
 import { timeAgo } from "../../utils/timeAgo";
-import { ProfileUrl } from "../../utils/imageUrl";
 import useAuthStore from "../../store/useAuthStore";
 
 const PostHeader = ({ post, creatorProfile,profileImageUrl,imageLoading }) => {
         const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(post.createdBy);
         const UseAuth = useAuthStore((state) => state.user);
-        let url =ProfileUrl(creatorProfile?.profile_picture_id)//||''
         let visitingAnotherProfileAndAuth = UseAuth &&creatorProfile && creatorProfile.username !== UseAuth.username
         // UseAuth &&creatorProfile && creatorProfile.username&&console.log(visitingAnotherProfileAndAuth)
 
@@ -23,9 +21,10 @@ const PostHeader = ({ post, creatorProfile,profileImageUrl,imageLoading }) => {
         return (
             <Flex justifyContent={"space-between"} alignItems={"center"} w={"full"} my={2}>
                 <Flex alignItems={"center"} gap={2}>
-                    {profileImageUrl ? (
+                    {/* Wait for the profile, not the picture - users without one would spin forever */}
+                    {creatorProfile ? (
                         <Link to={`/${creatorProfile.username}`}>
-                            <Avatar src={profileImageUrl} alt='user profile pic' size={"sm"} />
+                            <Avatar src={profileImageUrl || undefined} name={creatorProfile.username} alt='user profile pic' size={"sm"} referrerPolicy='no-referrer' />
                         </Link>
                     ) : (
                         <SkeletonCircle size='10' />
