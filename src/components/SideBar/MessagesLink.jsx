@@ -7,11 +7,11 @@ const Messages = () => {
     return (
         <Tooltip
             hasArrow
-            label={"Home"}
+            label={"Messages"}
             placement='right'
             ml={1}
             openDelay={500}
-            display={{ base: "block", md: "none" }}
+            display={{ base: "block", xl: "none" }}
         >
             <Link
                 display={"flex"}
@@ -22,11 +22,11 @@ const Messages = () => {
                 _hover={{ bg: "whiteAlpha.400" }}
                 borderRadius={6}
                 p={2}
-                w={{ base: 10, md: "full" }}
-                justifyContent={{ base: "center", md: "flex-start" }}
+                w={{ base: 10, xl: "full" }}
+                justifyContent={{ base: "center", xl: "flex-start" }}
             >
                 <MessagesLogo size={25}/>
-                <Box display={{ base: "none", md: "block" }}>Messages</Box>
+                <Box display={{ base: "none", xl: "block" }}>Messages</Box>
             </Link>
         </Tooltip>
     );

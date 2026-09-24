@@ -40,8 +40,11 @@ export default function FeedPost({post}) {
 
     return (
         <>
-            <PostHeader post={post} profileImageUrl={profileImageUrl} creatorProfile={userProfile} imageLoading={imageLoading}/>
-            <Box my={2} borderRadius={4} overflow={"hidden"} position='relative' onClick={handleTap} userSelect='none'>
+            <Box px={{ base: 3, md: 0 }}>
+                <PostHeader post={post} profileImageUrl={profileImageUrl} creatorProfile={userProfile} imageLoading={imageLoading}/>
+            </Box>
+            {/* edge to edge on phones, rounded card on bigger screens */}
+            <Box my={2} borderRadius={{ base: 0, md: 4 }} bg='black' overflow={"hidden"} position='relative' onClick={handleTap} userSelect='none'>
 				<PostMedia post={post} variant="feed" />
 				{showHeart > 0 && (
 					<Box
@@ -60,7 +63,9 @@ export default function FeedPost({post}) {
 					</Box>
 				)}
 			</Box>
-            <PostFooter post={post} isProfilePage={false} creatorProfile={userProfile} likeState={likeState}/>
+            <Box px={{ base: 3, md: 0 }}>
+                <PostFooter post={post} isProfilePage={false} creatorProfile={userProfile} likeState={likeState}/>
+            </Box>
         </>
     )
 }

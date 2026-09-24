@@ -29,7 +29,7 @@ export const UnreadBadge = ({ count }) =>
 const Notifications = () => {
 	const unread = useNotificationStore((state) => state.unread);
 	return (
-		<Tooltip hasArrow label={"Notifications"} placement='right' ml={1} openDelay={500} display={{ base: "block", md: "none" }}>
+		<Tooltip hasArrow label={"Notifications"} placement='right' ml={1} openDelay={500} display={{ base: "block", xl: "none" }}>
 			<Link
 				display={"flex"}
 				to={"/notifications"}
@@ -39,14 +39,14 @@ const Notifications = () => {
 				_hover={{ bg: "whiteAlpha.400" }}
 				borderRadius={6}
 				p={2}
-				w={{ base: 10, md: "full" }}
-				justifyContent={{ base: "center", md: "flex-start" }}
+				w={{ base: 10, xl: "full" }}
+				justifyContent={{ base: "center", xl: "flex-start" }}
 			>
 				<Box position='relative'>
 					<NotificationsLogo />
 					<UnreadBadge count={unread} />
 				</Box>
-				<Box display={{ base: "none", md: "block" }}>Notifications</Box>
+				<Box display={{ base: "none", xl: "block" }}>Notifications</Box>
 			</Link>
 		</Tooltip>
 	);

@@ -68,6 +68,13 @@ Redux Toolkit, react-query, formik, styled-components and tailwind are in `packa
 
 **Responsive layout.** Below the `md` breakpoint, `PageLayout` hides the sidebar and renders `components/NavBar/MobileNav.jsx` instead: a top bar and a fixed bottom tab bar. The bottom bar is hidden inside an open chat, and phones log out from their own profile header. `FeedPost` handles double-tap-to-like with its own tap timer, not `onDoubleClick`, so it also works on touch.
 
+**Stories, Reels, share links.**
+- `components/Stories/StoriesBar.jsx` sits at the top of the feed and uses `hooks/useStories.js` (`/api/v1/stories`). `StoryViewer.jsx` is the full-screen player: photos last 5 s via requestAnimationFrame, videos report their own progress, tap left or right to move, and holding pauses.
+- `/reels` plays video posts as a vertical scroll-snap feed. It hides the phone top bar.
+- `/p/:postId` is a public single-post page. `utils/share.js` uses the native share sheet and falls back to copying the link.
+
+**Breakpoints.** Phones (base) get MobileNav; tablets (md–lg) get a 72px icon rail; `xl` and up get the 240px sidebar with labels. Every `SideBar/*` item switches between collapsed and labelled at `xl`, not `md`, and PageLayout sets the rail width to match.
+
 **Theme and PWA.** `main.jsx` sets up the Chakra theme (dark mode by default, black body background) and registers `/sw.js`. `vite.config.js` also configures `vite-plugin-pwa`, whose manifest still carries leftover "Amazon React" naming.
 
 ## Dead or legacy code

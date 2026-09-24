@@ -18,17 +18,17 @@ export function SideBar({ authUser, onLogout}){
             position={'sticky'}
             top={0}
             left={0}
-            px={{base:2,md:4}}
+            px={{ base: 2, xl: 4 }}
             >
                 <Flex direction={'column'} gap={10} w={'full'} height={'full'}>
-                    <Link to={"/"} as={RouterLink} pl={2} display={{ base: "none", md: "block" }} cursor='pointer' >
+                    <Link to={"/"} as={RouterLink} pl={2} display={{ base: "none", xl: "block" }} cursor='pointer' >
                         <InstagramLogo/>
                     </Link>
                     <Link
                         to={"/"}
                         as={RouterLink}
                         p={2}
-                        display={{ base: "block", md: "none" }}
+                        display={{ base: "block", xl: "none" }}
                         borderRadius={6}
                         _hover={{
                             bg: "whiteAlpha.200",
@@ -50,7 +50,7 @@ export function SideBar({ authUser, onLogout}){
 					placement='right'
 					ml={1}
 					openDelay={500}
-					display={{ base: "block", md: "none" }}
+					display={{ base: "block", xl: "none" }}
 				>
 					<Flex
 						onClick={()=>{onLogout(user._id)}}
@@ -59,13 +59,13 @@ export function SideBar({ authUser, onLogout}){
 						_hover={{ bg: "whiteAlpha.400" }}
 						borderRadius={6}
 						p={2}
-						w={{ base: 10, md: "full" }}
+						w={{ base: 10, xl: "full" }}
 						mt={"auto"}
-						justifyContent={{ base: "center", md: "flex-start" }}
+						justifyContent={{ base: "center", xl: "flex-start" }}
 					>
 						<BiLogOut size={25} />
 						<Button
-							display={{ base: "none", md: "block" }}
+							display={{ base: "none", xl: "block" }}
 							variant={"ghost"}
 							_hover={{ bg: "transparent" }}
 							isLoading={isLoading}

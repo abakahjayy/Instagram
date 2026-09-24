@@ -14,6 +14,8 @@ import useShowToast from "./hooks/useShowToast.js";
 import ChatPage from "./pages/Messages/Chat.jsx";
 import SearchPage from "./pages/Search/Search.jsx";
 import NotificationsPage from "./pages/Notifications/Notifications.jsx";
+import ReelsPage from "./pages/Reels/Reels.jsx";
+import PostPage from "./pages/Post/PostPage.jsx";
 
 
 export default function App(){
@@ -97,6 +99,23 @@ export default function App(){
             element: (
                 <PageLayout authUser={authUser} onLogout={handleLogout}>
                     {authUser ? <SearchPage /> : <Navigate to="/auth" />}
+                </PageLayout>
+            ),
+        },
+        {
+            path: '/reels',
+            element: (
+                <PageLayout authUser={authUser} onLogout={handleLogout}>
+                    {authUser ? <ReelsPage /> : <Navigate to="/auth" />}
+                </PageLayout>
+            ),
+        },
+        {
+            // share links - public, like instagram.com/p/...
+            path: '/p/:postId',
+            element: (
+                <PageLayout authUser={authUser} onLogout={handleLogout}>
+                    <PostPage />
                 </PageLayout>
             ),
         },

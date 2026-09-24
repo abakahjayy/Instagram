@@ -8,6 +8,9 @@ import { timeAgo } from "../../utils/timeAgo";
 import CommentsModal from "../Modals/CommentsModal";
 import useSavePost from "../../hooks/useSavePost";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { FiSend } from "react-icons/fi";
+import { sharePost } from "../../utils/share";
+import useShowToast from "../../hooks/useShowToast";
 
 // `likeState` lets FeedPost share one useLikePost with its double-tap-to-like media.
 const PostFooter = ({ post, isProfilePage, creatorProfile, likeState }) => {
@@ -19,7 +22,13 @@ const PostFooter = ({ post, isProfilePage, creatorProfile, likeState }) => {
 	const { handleLikePost, isLiked, likes } = likeState || ownLikeState;
 	const { isSaved, toggleSave } = useSavePost(post);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-    // console.log(post, isProfilePage, creatorProfile)
+	const showToast = useShowToast();
+
+	const handleShare = async () => {
+		const result = await sharePost(post, creatorProfile?.username);
+		if (result === "copied") showToast("Link copied", "", "success", 1500);
+		if (result === "failed") showToast("Couldn't share", "Copy the address bar instead", "error");
+	};
 
 	const handleSubmitComment = async () => {
 		await handlePostComment(post?._id, comment);
@@ -27,14 +36,18 @@ const PostFooter = ({ post, isProfilePage, creatorProfile, likeState }) => {
 	};
 
 	return (
-		<Box mb={10} marginTop={"auto"}>
-			<Flex alignItems={"center"} gap={4} w={"full"} pt={0} mb={2} mt={4}>
-				<Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
+		<Box mb={{ base: 6, md: 10 }} marginTop={"auto"}>
+			<Flex alignItems={"center"} gap={4} w={"full"} pt={0} mb={2} mt={{ base: 2, md: 4 }}>
+				<Box as='button' aria-label={isLiked ? "Unlike" : "Like"} onClick={handleLikePost} fontSize={18}>
 					{!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
 				</Box>
 
-				<Box cursor={"pointer"} fontSize={18} onClick={() => commentRef.current.focus()}>
+				<Box as='button' aria-label='Comment' fontSize={18} onClick={() => commentRef.current?.focus()}>
 					<CommentLogo />
+				</Box>
+
+				<Box as='button' aria-label='Share' fontSize={22} onClick={handleShare}>
+					<FiSend />
 				</Box>
 
 				<Box
@@ -48,7 +61,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile, likeState }) => {
 				</Box>
 			</Flex>
 			<Text fontWeight={600} fontSize={"sm"}>
-				{likes} likes
+				{likes} {likes === 1 ? "like" : "likes"}
 			</Text>
 
 			{isProfilePage && (

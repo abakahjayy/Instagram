@@ -1,5 +1,6 @@
 import { Box, Flex, Grid, Skeleton, Text, VStack } from "@chakra-ui/react";
 import ProfilePost from "./ProfilePost";
+import { FiCamera } from "react-icons/fi";
 import useGetUserPosts from "../../hooks/useGetUserPosts";
 
 
@@ -40,8 +41,13 @@ export default ProfilePosts;
 
 const NoPostsFound = () => {
 	return (
-		<Flex flexDir='column' textAlign={"center"} mx={"auto"} mt={10}>
-			<Text fontSize={"2xl"}>No Posts Found🤔</Text>
+		<Flex flexDir='column' alignItems='center' textAlign={"center"} mx={"auto"} mt={{ base: 10, md: 16 }} px={6} gap={3}>
+			<Flex w='62px' h='62px' borderRadius='full' border='2px solid' borderColor='whiteAlpha.800' alignItems='center' justifyContent='center'>
+				<FiCamera size={28} />
+			</Flex>
+			<Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight='extrabold'>
+				No posts yet
+			</Text>
 		</Flex>
 	);
 };

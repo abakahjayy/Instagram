@@ -39,9 +39,9 @@ const CommentsModal = ({ isOpen, onClose, post }) => {
 	}, [isOpen, post.comments.length]);
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} motionPreset='slideInLeft'>
+		<Modal isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={{ base: "full", md: "md" }}>
 			<ModalOverlay />
-			<ModalContent bg={"black"} border={"1px solid gray"} maxW={"400px"}>
+			<ModalContent bg={"black"} border={{ base: "none", md: "1px solid gray" }} maxW={{ base: "100vw", md: "400px" }}>
 				<ModalHeader>Comments</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody pb={6}>
@@ -49,7 +49,7 @@ const CommentsModal = ({ isOpen, onClose, post }) => {
 						mb={4}
 						gap={4}
 						flexDir={"column"}
-						maxH={"250px"}
+						maxH={{ base: "calc(100dvh - 190px)", md: "250px" }}
 						overflowY={"auto"}
 						ref={commentsContainerRef}
 					>
@@ -88,9 +88,9 @@ export default CommentsModal;
 
 // const CommentsModal = ({ isOpen, onClose }) => {
 // 	return (
-// 		<Modal isOpen={isOpen} onClose={onClose} motionPreset='slideInLeft'>
+// 		<Modal isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={{ base: "full", md: "md" }}>
 // 			<ModalOverlay />
-// 			<ModalContent bg={"black"} border={"1px solid gray"} maxW={"400px"}>
+// 			<ModalContent bg={"black"} border={{ base: "none", md: "1px solid gray" }} maxW={{ base: "100vw", md: "400px" }}>
 // 				<ModalHeader>Comments</ModalHeader>
 // 				<ModalCloseButton />
 // 				<ModalBody pb={6}>

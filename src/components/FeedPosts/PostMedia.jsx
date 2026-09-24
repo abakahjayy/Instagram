@@ -14,7 +14,13 @@ export default function PostMedia({ post, variant = "feed" }) {
 	if (!post?.postId) return null;
 
 	if (!isVideoPost(post) && !imageFailed) {
-		const fit = variant === "thumb" ? { w: "100%", h: "100%", objectFit: "cover" } : {};
+		// feed: always full post width (small uploads included); full: fit inside the modal
+		const fit =
+			variant === "thumb"
+				? { w: "100%", h: "100%", objectFit: "cover" }
+				: variant === "feed"
+				? { w: "100%", objectFit: "cover" }
+				: { maxH: "85vh", objectFit: "contain" };
 		return (
 			<Image
 				src={imageUrl(post.postId)}

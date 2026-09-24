@@ -5,7 +5,7 @@ import { SearchLogo } from "../../assets/constants";
 // Sidebar entry for the /search page (people search + Explore grid).
 const Search = () => {
 	return (
-		<Tooltip hasArrow label={"Search"} placement='right' ml={1} openDelay={500} display={{ base: "block", md: "none" }}>
+		<Tooltip hasArrow label={"Search"} placement='right' ml={1} openDelay={500} display={{ base: "block", xl: "none" }}>
 			<Link
 				display={"flex"}
 				to={"/search"}
@@ -15,11 +15,11 @@ const Search = () => {
 				_hover={{ bg: "whiteAlpha.400" }}
 				borderRadius={6}
 				p={2}
-				w={{ base: 10, md: "full" }}
-				justifyContent={{ base: "center", md: "flex-start" }}
+				w={{ base: 10, xl: "full" }}
+				justifyContent={{ base: "center", xl: "flex-start" }}
 			>
 				<SearchLogo />
-				<Box display={{ base: "none", md: "block" }}>Search</Box>
+				<Box display={{ base: "none", xl: "block" }}>Search</Box>
 			</Link>
 		</Tooltip>
 	);

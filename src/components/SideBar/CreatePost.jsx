@@ -53,7 +53,7 @@ const CreatePost = () => {
 				placement='right'
 				ml={1}
 				openDelay={500}
-				display={{ base: "block", md: "none" }}
+				display={{ base: "block", xl: "none" }}
 			>
 				<Flex
 					alignItems={"center"}
@@ -61,16 +61,16 @@ const CreatePost = () => {
 					_hover={{ bg: "whiteAlpha.400" }}
 					borderRadius={6}
 					p={2}
-					w={{ base: 10, md: "full" }}
-					justifyContent={{ base: "center", md: "flex-start" }}
+					w={{ base: 10, xl: "full" }}
+					justifyContent={{ base: "center", xl: "flex-start" }}
 					onClick={onOpen}
 				>
 					<CreatePostLogo />
-					<Box display={{ base: "none", md: "block" }}>Create</Box>
+					<Box display={{ base: "none", xl: "block" }}>Create</Box>
 				</Flex>
 			</Tooltip>
 
-			<Modal isOpen={isOpen} onClose={onClose} size='xl'>
+			<Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "xl" }} scrollBehavior='inside'>
 				<ModalOverlay />
 
 				<ModalContent bg={"black"} border={"1px solid gray"}>

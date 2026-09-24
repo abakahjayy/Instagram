@@ -1,7 +1,7 @@
 import { Box, Flex, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { AiFillHome } from "react-icons/ai";
-import { InstagramLogo, MessagesLogo, NotificationsLogo, SearchLogo } from "../../assets/constants";
+import { InstagramLogo, MessagesLogo, NotificationsLogo, ReelsLogo, SearchLogo } from "../../assets/constants";
 import CreatePost from "../SideBar/CreatePost";
 import ProfileLink from "../SideBar/ProfileLink";
 import { UnreadBadge } from "../SideBar/Notifications";
@@ -76,8 +76,8 @@ export function MobileBottomNav({ authUser, onLogout }) {
 				<SearchLogo />
 			</IconLink>
 			<CreatePost />
-			<IconLink to='/messages' label='Messages'>
-				<MessagesLogo />
+			<IconLink to='/reels' label='Reels'>
+				<ReelsLogo />
 			</IconLink>
 			<ProfileLink authUser={authUser} onLogout={onLogout} />
 		</Flex>
