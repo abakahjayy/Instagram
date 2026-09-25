@@ -1,5 +1,5 @@
-// Instagram for Windows: a desktop window around the live site, packaged as
-// Instagram-Setup.exe by electron-builder (see package.json "build").
+// Nsoro for Windows: a desktop window around the live site, packaged as
+// Nsoro-Setup.exe by electron-builder (see package.json "build").
 // The site does all the work, so a new website deploy updates the app too.
 const { app, BrowserWindow, shell, session, Menu } = require("electron");
 const path = require("path");
@@ -11,7 +11,7 @@ const IN_APP_HOSTS = new Set([new URL(SITE).host, "fullbackendd.onrender.com", "
 
 // Google blocks sign-in from browsers that announce "Electron", so present the
 // plain Chrome user agent this Electron build is based on.
-app.userAgentFallback = app.userAgentFallback.replace(/\s(Electron|Instagram|instagram-desktop)\/\S+/gi, "");
+app.userAgentFallback = app.userAgentFallback.replace(/\s(Electron|Nsoro|nsoro-desktop|Instagram|instagram-desktop)\/\S+/gi, "");
 
 // One window only: opening the app again focuses it.
 if (!app.requestSingleInstanceLock()) app.quit();
@@ -23,7 +23,7 @@ function createWindow() {
 		height: 840,
 		minWidth: 380,
 		minHeight: 560,
-		title: "Instagram",
+		title: "Nsoro",
 		backgroundColor: "#000000",
 		icon: path.join(__dirname, "build", "icon.png"),
 		autoHideMenuBar: true,
@@ -58,7 +58,7 @@ function createWindow() {
 		win.loadURL(
 			"data:text/html," +
 				encodeURIComponent(`<body style="background:#000;color:#fff;font-family:Segoe UI,sans-serif;display:grid;place-items:center;height:100vh;margin:0">
-<div style="text-align:center"><h2>Can't reach Instagram</h2><p style="color:#aaa">Check your internet connection.</p>
+<div style="text-align:center"><h2>Can't reach Nsoro</h2><p style="color:#aaa">Check your internet connection.</p>
 <button onclick="location.href='${START_URL}'" style="background:#0095f6;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:15px;cursor:pointer">Try again</button></div></body>`)
 		);
 	});

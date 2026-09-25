@@ -33,7 +33,7 @@ export default function GetAppBanner() {
 			<Image src='/icons/icon-192.png' alt='' w='36px' h='36px' borderRadius='22%' />
 			<Flex direction='column' flex={1} minW={0}>
 				<Text fontSize='sm' fontWeight='semibold' noOfLines={1}>
-					Instagram
+					Nsoro
 				</Text>
 				<Text fontSize='xs' color='gray.400' noOfLines={1}>
 					Get the app - it&apos;s free

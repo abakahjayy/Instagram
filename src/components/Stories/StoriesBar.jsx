@@ -6,9 +6,9 @@ import useAuthStore from "../../store/useAuthStore";
 import { avatarUrl } from "../../utils/media";
 import StoryViewer from "./StoryViewer";
 
-const RING = "linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5)";
+const RING = "linear-gradient(45deg, #f2b705, #2f9e44, #0a7a4b)"; // Nsoro green-gold
 
-// Story ring: Instagram's gradient while unseen, grey once everything is watched.
+// Story ring: the brand gradient while unseen, grey once everything is watched.
 function StoryAvatar({ user, seen, hasStories, size = "62px", children }) {
 	return (
 		<Box position='relative' p='3px' borderRadius='full' bg={hasStories ? (seen ? "whiteAlpha.400" : RING) : "transparent"}>

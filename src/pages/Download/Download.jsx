@@ -37,9 +37,9 @@ const PUBLIC_SITE = "https://instagrammmm-z34p.onrender.com";
 //    Only Windows gets one on this page (EXE: GitHub Release built from desktop/).
 const EXE = {
 	label: "Download installer (.exe)",
-	href: "https://github.com/abakahjayy/Instagram/releases/latest/download/Instagram-Setup.exe",
+	href: "https://github.com/abakahjayy/Instagram/releases/latest/download/Nsoro-Setup.exe",
 	size: "78 MB",
-	file: "Instagram-Setup.exe",
+	file: "Nsoro-Setup.exe",
 };
 
 // Where the "Install app" command lives when the browser doesn't offer the prompt.
@@ -66,9 +66,9 @@ const PLATFORMS = [
 		name: "Android",
 		icon: FaAndroid,
 		steps: [
-			"Open this page in Chrome on your phone and tap “Install Instagram”.",
+			"Open this page in Chrome on your phone and tap “Install Nsoro”.",
 			"No button? Tap ⋮ at the top right → “Add to Home screen” → “Install”.",
-			"Instagram appears in your app drawer and home screen - no download, no warnings.",
+			"Nsoro appears in your app drawer and home screen - no download, no warnings.",
 		],
 	},
 	{
@@ -78,8 +78,8 @@ const PLATFORMS = [
 		file: EXE,
 		fileSteps: [
 			"Click “Download installer”. If the browser warns, choose Keep (Edge: ⋯ → Keep → Keep anyway).",
-			"Run Instagram-Setup.exe. If “Windows protected your PC” appears, click More info → Run anyway.",
-			"Instagram installs and opens, with Start menu and desktop shortcuts.",
+			"Run Nsoro-Setup.exe. If “Windows protected your PC” appears, click More info → Run anyway.",
+			"Nsoro installs and opens, with Start menu and desktop shortcuts.",
 		],
 	},
 	{
@@ -90,7 +90,7 @@ const PLATFORMS = [
 			"Open this page in Safari (Chrome on iOS 16.4+ works too).",
 			"Tap the Share button (the square with an arrow pointing up).",
 			"Scroll down and tap “Add to Home Screen”, then tap “Add”.",
-			"Instagram appears on your home screen and opens full screen.",
+			"Nsoro appears on your home screen and opens full screen.",
 		],
 	},
 	{
@@ -98,9 +98,9 @@ const PLATFORMS = [
 		name: "Mac",
 		icon: MdLaptopMac,
 		steps: [
-			"Chrome or Edge: click “Install Instagram” on this page, or the install icon in the address bar.",
+			"Chrome or Edge: click “Install Nsoro” on this page, or the install icon in the address bar.",
 			"Safari (macOS Sonoma or later): choose File → Add to Dock.",
-			"Instagram opens in its own window from the Dock and Launchpad.",
+			"Nsoro opens in its own window from the Dock and Launchpad.",
 		],
 	},
 ];
@@ -176,14 +176,14 @@ export default function DownloadPage() {
 	const onInstall = async () => {
 		if ((await install()) === "accepted") {
 			setJustInstalled(true);
-			showToast("Installing Instagram", "Find it on your home screen or in your apps.", "success");
+			showToast("Installing Nsoro", "Find it on your home screen or in your apps.", "success");
 		}
 	};
 
 	const shareDownloadPage = async () => {
 		const url = `${PUBLIC_SITE}/download`;
 		try {
-			if (navigator.share) await navigator.share({ title: "Get the Instagram app", url });
+			if (navigator.share) await navigator.share({ title: "Get the Nsoro app", url });
 			else {
 				await navigator.clipboard.writeText(url);
 				showToast("Link copied", url, "success", 2500);
@@ -196,8 +196,8 @@ export default function DownloadPage() {
 	return (
 		<Box maxW='640px' mx='auto' px={4} py={{ base: 6, md: 12 }}>
 			<VStack spacing={4} textAlign='center' mb={8}>
-				<Image src='/icons/icon-192.png' alt='Instagram app icon' w={{ base: "84px", md: "104px" }} borderRadius='22%' />
-				<Heading size={{ base: "lg", md: "xl" }}>Get the Instagram app</Heading>
+				<Image src='/icons/icon-192.png' alt='Nsoro app icon' w={{ base: "84px", md: "104px" }} borderRadius='22%' />
+				<Heading size={{ base: "lg", md: "xl" }}>Get the Nsoro app</Heading>
 				<Text color='gray.400' maxW='460px'>
 					Free for Android, Windows, iPhone, iPad and Mac.
 				</Text>
@@ -211,7 +211,7 @@ export default function DownloadPage() {
 						<Box>
 							<Text fontWeight='bold'>{installed ? "You're using the app" : "Installed"}</Text>
 							<Text color='gray.400' fontSize='sm'>
-								{installed ? "You opened Instagram from your home screen or apps." : "Open Instagram from your home screen or apps."}
+								{installed ? "You opened Nsoro from your home screen or apps." : "Open Nsoro from your home screen or apps."}
 							</Text>
 						</Box>
 					</Flex>
@@ -230,7 +230,7 @@ export default function DownloadPage() {
 						{canInstall && (
 							<Box mb={4}>
 								<Button leftIcon={<DownloadIcon />} colorScheme='blue' size='lg' w='full' onClick={onInstall}>
-									Install Instagram
+									Install Nsoro
 								</Button>
 								<Text fontSize='xs' color='gray.400' textAlign='center' mt={2}>
 									No download, no warnings · installs in seconds · updates itself
@@ -273,7 +273,7 @@ export default function DownloadPage() {
 							{p.file ? (
 								<>
 									<Text fontSize='sm' color='gray.300' mb={3}>
-										Best: open this page on that device and tap “Install Instagram” - no download, no warnings.
+										Best: open this page on that device and tap “Install Nsoro” - no download, no warnings.
 									</Text>
 									<FileDownload platform={p} />
 								</>

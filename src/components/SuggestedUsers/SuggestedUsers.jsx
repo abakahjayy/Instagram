@@ -61,7 +61,7 @@ export default function SuggestedUsers({ authUser, onLogout }) {
 					</span>
 				))}
 				<Text mt={4} textTransform='uppercase'>
-					© {new Date().getFullYear()} Instagram clone by{" "}
+					© {new Date().getFullYear()} Nsoro by{" "}
 					<Link href='https://portfolio-8jmo.onrender.com/' isExternal color='ig.text'>
 						Abakah Joshua
 					</Link>

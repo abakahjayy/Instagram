@@ -30,7 +30,7 @@ export default function PostPage() {
 			<Flex direction='column' alignItems='center' py={20} gap={3}>
 				<Text fontSize='xl'>Sorry, this post isn&apos;t available.</Text>
 				<Link as={RouterLink} to='/' color='blue.400'>
-					Go back to Instagram
+					Go back to Nsoro
 				</Link>
 			</Flex>
 		);

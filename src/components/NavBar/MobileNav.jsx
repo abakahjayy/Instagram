@@ -1,7 +1,7 @@
 import { Box, Flex, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { AiFillHome } from "react-icons/ai";
-import { InstagramLogo, MessagesLogo, NotificationsLogo, ReelsLogo, SearchLogo } from "../../assets/constants";
+import { NsoroLogo, MessagesLogo, NotificationsLogo, ReelsLogo, SearchLogo } from "../../assets/constants";
 import CreatePost from "../SideBar/CreatePost";
 import ProfileLink from "../SideBar/ProfileLink";
 import { UnreadBadge } from "../SideBar/Notifications";
@@ -37,7 +37,7 @@ export function MobileTopBar() {
 			borderColor='ig.border'
 		>
 			<Link as={RouterLink} to='/' aria-label='Home' transform='scale(0.8)' transformOrigin='left center'>
-				<InstagramLogo />
+				<NsoroLogo />
 			</Link>
 			<Flex gap={1}>
 				<IconLink to='/notifications' label='Notifications'>

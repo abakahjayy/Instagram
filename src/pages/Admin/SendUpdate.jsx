@@ -29,7 +29,7 @@ export default function SendUpdatePage() {
 	const authUser = useAuthStore((state) => state.user);
 	const user = authUser?.user || authUser;
 	const showToast = useShowToast();
-	const [form, setForm] = useState({ subject: "", message: "", ctaLabel: "Open Instagram", ctaPath: "/" });
+	const [form, setForm] = useState({ subject: "", message: "", ctaLabel: "Open Nsoro", ctaPath: "/" });
 	const [sending, setSending] = useState(null); // "test" | "all"
 	const confirm = useDisclosure();
 	const cancelRef = useRef(null);

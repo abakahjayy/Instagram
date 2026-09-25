@@ -33,15 +33,15 @@ export default defineConfig({
       // Icons come from scripts/generate-icons.mjs.
       manifest: {
         id: '/',
-        name: 'Instagram',
-        short_name: 'Instagram',
+        name: 'Nsoro',
+        short_name: 'Nsoro',
         description: 'Share photos, videos, stories and reels, and chat with friends.',
         start_url: '/?source=app',
         scope: '/',
         display: 'standalone',
         display_override: ['window-controls-overlay', 'standalone'],
         orientation: 'any',
-        theme_color: '#000000',
+        theme_color: '#0a7a4b',
         background_color: '#000000',
         categories: ['social', 'photo'],
         icons: [

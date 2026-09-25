@@ -19,7 +19,7 @@ self.addEventListener('push', (event) => {
       windows.forEach((w) => w.postMessage({ type: 'push', data }));
       return;
     }
-    await self.registration.showNotification(data.title || 'Instagram', {
+    await self.registration.showNotification(data.title || 'Nsoro', {
       body: data.body || '',
       icon: data.icon || '/icons/icon-192.png',
       badge: data.badge || '/icons/icon-192.png',

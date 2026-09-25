@@ -1,8 +1,8 @@
 {
-  "name": "instagram-desktop",
-  "productName": "Instagram",
-  "version": "1.0.0",
-  "description": "Instagram for Windows",
+  "name": "nsoro-desktop",
+  "productName": "Nsoro",
+  "version": "2.0.0",
+  "description": "Nsoro for Windows - share your moments",
   "author": "Abakah Joshua",
   "main": "main.js",
   "private": true,
@@ -11,8 +11,8 @@
     "dist": "electron-builder --win nsis --x64"
   },
   "build": {
-    "appId": "com.instagrammmm.app",
-    "productName": "Instagram",
+    "appId": "com.nsoro.app",
+    "productName": "Nsoro",
     "directories": {
       "output": "release",
       "buildResources": "build"
@@ -31,9 +31,9 @@
       "perMachine": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Instagram",
+      "shortcutName": "Nsoro",
       "runAfterFinish": true,
-      "artifactName": "Instagram-Setup.exe"
+      "artifactName": "Nsoro-Setup.exe"
     }
   },
   "devDependencies": {

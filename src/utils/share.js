@@ -5,7 +5,7 @@ export const postLink = (post) => `${window.location.origin}/p/${post._id}`;
 
 export async function sharePost(post, author) {
 	const url = postLink(post);
-	const title = author ? `${author}'s post on Instagram` : "Instagram post";
+	const title = author ? `${author}'s post on Nsoro` : "Nsoro post";
 	if (navigator.share) {
 		try {
 			await navigator.share({ title, text: post.caption || title, url });

@@ -22,7 +22,7 @@ export default function ProfileHeader({authUser,onLogout,username,owner}) {
       const shareProfile = async () => {
         const link = `${window.location.origin}/${user.username}`;
         try {
-          if (navigator.share) await navigator.share({ title: `${user.username} on Instagram`, url: link });
+          if (navigator.share) await navigator.share({ title: `${user.username} on Nsoro`, url: link });
           else {
             await navigator.clipboard.writeText(link);
             showToast("Profile link copied", "", "success", 1500);

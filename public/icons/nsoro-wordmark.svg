@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="337" height="133" viewBox="0 0 337 133">
+  <svg x="8" y="22" width="88" height="88" viewBox="0 0 512 512"><defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0a7a4b"/>
+    <stop offset="0.55" stop-color="#2f9e44"/>
+    <stop offset="1" stop-color="#f2b705"/>
+  </linearGradient>
+</defs>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <g transform="translate(256 256) scale(1) translate(-256 -256)">
+    <polygon points="256.0,120.0 294.8,216.6 398.7,223.6 318.8,290.4 344.2,391.4 256.0,336.0 167.8,391.4 193.2,290.4 113.3,223.6 217.2,216.6" fill="#063d27" opacity="0.22" stroke="#063d27" stroke-opacity="0.22" stroke-width="36" stroke-linejoin="round" transform="translate(0 12)"/>
+    <polygon points="256.0,120.0 294.8,216.6 398.7,223.6 318.8,290.4 344.2,391.4 256.0,336.0 167.8,391.4 193.2,290.4 113.3,223.6 217.2,216.6" fill="#ffffff" stroke="#ffffff" stroke-width="36" stroke-linejoin="round"/>
+    <polygon points="256.0,214.0 270.1,252.6 311.2,254.1 278.8,279.4 290.1,318.9 256.0,296.0 221.9,318.9 233.2,279.4 200.8,254.1 241.9,252.6" fill="#111111" stroke="#111111" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M388,90 Q394.84,121.16 426,128 Q394.84,134.84 388,166 Q381.16,134.84 350,128 Q381.16,121.16 388,90 Z" fill="#ffffff" opacity="0.95"/>
+    <path d="M122,132 Q125.24,146.76 140,150 Q125.24,153.24 122,168 Q118.76,153.24 104,150 Q118.76,146.76 122,132 Z" fill="#ffffff" opacity="0.7"/>
+  </g>
+</svg>
+  <text x="112" y="92" font-family="Segoe UI, Arial, sans-serif" font-size="66" font-weight="800" fill="#f5f5f5" letter-spacing="-2">Nsoro</text>
+</svg>

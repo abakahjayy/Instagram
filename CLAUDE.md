@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Instagram clone frontend: React 18 + Vite (JavaScript/JSX, no TypeScript), Chakra UI for all styling, Zustand for state. It is a pure client. All data comes from a separate Express backend (not in this repo) reached through `VITE_API_URL`. Deployed on Vercel. `vercel.json` rewrites every path to `/` so client-side routing works.
+**Nsoro** (Twi *nsoromma*, "star"): a photo/video social app, originally built as an Instagram clone. Frontend: React 18 + Vite (JavaScript/JSX, no TypeScript), Chakra UI for all styling, Zustand for state. It is a pure client. All data comes from a separate Express backend (not in this repo) reached through `VITE_API_URL`. Deployed on Vercel. `vercel.json` rewrites every path to `/` so client-side routing works.
+
+## Branding
+
+The product is called **Nsoro**. It must not use Instagram's or Meta's name, logo, gradient or artwork in anything a user sees (it is published to app stores). Code comments may still compare behaviour with Instagram. Brand colours: green `#0a7a4b`, `#2f9e44`, gold `#f2b705`. The logo is `public/icons/nsoro-logo.svg` (`NsoroMark`/`NsoroLogo` in `src/assets/constants.jsx`); `public/logo.png` and `public/auth.png` are Nsoro artwork. The repo name, the Render URL, the `/api/v1/instagram` API path and the Android package id `com.instagrammmm.app` keep the old name because changing them would break installs and links.
 
 ## Commands
 
@@ -77,8 +81,8 @@ Redux Toolkit, react-query, formik, styled-components and tailwind are in `packa
 
 **Installable app / downloads.**
 - The `/download` page detects the device and puts that device's option first.
-- **Android:** a signed Trusted Web Activity APK (`com.instagrammmm.app`) at `public/downloads/Instagram.apk`, made with PWABuilder's packaging service. `public/.well-known/assetlinks.json` must match the signing key; the key lives in "Instagram App Packages" on the owner's Desktop and is never committed.
-- **Windows:** `Instagram-Setup.exe` is built from `desktop/` (Electron + electron-builder NSIS; `npm run dist`) and published as a GitHub Release asset on abakahjayy/Instagram. The page links to `/releases/latest/download/Instagram-Setup.exe`. The app window loads the live site and uses a plain Chrome user agent, because Google blocks sign-in from "Electron".
+- **Android:** a signed Trusted Web Activity APK (`com.instagrammmm.app`) at `public/downloads/Instagram.apk` (still shows the old name until it is rebuilt with PWABuilder, which needs the keystore password from the owner), made with PWABuilder's packaging service. `public/.well-known/assetlinks.json` must match the signing key; the key lives in "Instagram App Packages" on the owner's Desktop and is never committed.
+- **Windows:** `Nsoro-Setup.exe` (appId `com.nsoro.app`) is built from `desktop/` (Electron + electron-builder NSIS; `npm run dist`) and published as a GitHub Release asset on abakahjayy/Instagram. The page links to `/releases/latest/download/Nsoro-Setup.exe`. The app window loads the live site and uses a plain Chrome user agent, because Google blocks sign-in from "Electron".
 - **iPhone, iPad and Mac:** installed from the browser as a PWA. The manifest is in `vite.config.js`, the icons come from `scripts/generate-icons.mjs`, and `utils/install.js` catches `beforeinstallprompt` for the "install from this browser" button.
 - Links on the page use the public site address, never `window.location` (it showed localhost during local runs).
 - **Building the .exe on Windows** fails when unpacking winCodeSign's macOS symlinks without admin rights. Fix it by extracting the archive into the electron-builder cache as `winCodeSign-2.6.0`, ignoring the symlink errors.

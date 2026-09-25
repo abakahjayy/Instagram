@@ -47,7 +47,7 @@ async function subscribe(reg) {
 
 /** Asks permission (must be called from a click) and subscribes this device. */
 export async function enablePush() {
-    if (needsInstallForPush()) throw new Error("On iPhone and iPad, add Instagram to your Home Screen first, then turn on notifications from the app.");
+    if (needsInstallForPush()) throw new Error("On iPhone and iPad, add Nsoro to your Home Screen first, then turn on notifications from the app.");
     if (!pushSupported()) throw new Error("This browser doesn't support notifications.");
     const permission = await Notification.requestPermission();
     if (permission !== "granted") throw new Error("Notifications are blocked. Allow them in your browser's site settings.");

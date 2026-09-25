@@ -5,7 +5,7 @@ import { disablePush, enablePush, getPushState, sendTestPush } from "../../utils
 
 const HINTS = {
 	unsupported: "This browser can't show notifications.",
-	"install-first": "On iPhone/iPad, add Instagram to your Home Screen first (Get the app), then turn this on in the app.",
+	"install-first": "On iPhone/iPad, add Nsoro to your Home Screen first (Get the app), then turn this on in the app.",
 	denied: "Notifications are blocked for this site. Allow them in your browser's site settings.",
 };
 

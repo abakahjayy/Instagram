@@ -1,6 +1,6 @@
 import {Box, Flex,Link} from '@chakra-ui/react'
 import { Link as RouterLink } from "react-router-dom";
-import {InstagramMobileLogo,InstagramLogo} from '../../assets/constants.jsx'
+import { NsoroMark, NsoroLogo } from '../../assets/constants.jsx'
 import SidebarItems from "./SidebarItems";
 import MoreMenu from './MoreMenu';
 
@@ -32,7 +32,7 @@ export function SideBar({ authUser, onLogout}){
             >
                 <Flex direction={'column'} w={'full'} minH={'full'} alignItems={{ base: "center", xl: "stretch" }}>
                     <Link to={"/"} as={RouterLink} pl={2} display={{ base: "none", xl: "block" }} cursor='pointer' mb='var(--nav-logo-gap)'>
-                        <InstagramLogo/>
+                        <NsoroLogo />
                     </Link>
                     <Link
                         to={"/"}
@@ -46,7 +46,7 @@ export function SideBar({ authUser, onLogout}){
                         mb='var(--nav-logo-gap)'
                         aria-label='Home'
                     >
-                        <InstagramMobileLogo />
+                        <NsoroMark size={26} />
                     </Link>
 
                     <Flex direction={"column"} gap='var(--nav-gap)' cursor={"pointer"} alignItems={{ base: "center", xl: "stretch" }}>

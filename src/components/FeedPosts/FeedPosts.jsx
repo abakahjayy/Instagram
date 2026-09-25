@@ -45,7 +45,7 @@ export default function FeedPosts({authUser}) {
             {!isLoading && posts.length === 0 && (
 				<>
 					<VStack py={12} px={6} spacing={3} textAlign={"center"}>
-						<Text fontSize={"xl"} fontWeight={"bold"}>Welcome to Instagram</Text>
+						<Text fontSize={"xl"} fontWeight={"bold"}>Welcome to Nsoro</Text>
 						<Text color={"gray.400"}>Follow people to see their photos and videos here.</Text>
 						<Button as={RouterLink} to='/search' colorScheme='blue' size='sm'>Find people</Button>
 					</VStack>
