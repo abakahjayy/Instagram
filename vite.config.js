@@ -15,6 +15,8 @@ export default defineConfig({
         skipWaiting: true,
         clientsClaim: true,
         cleanupOutdatedCaches: true,
+        // Device notifications (Web Push) - public/push-sw.js
+        importScripts: ['/push-sw.js'],
         navigateFallback: null,
         globPatterns: ['**/*.{js,css,ico,png,svg,woff2}'],
         runtimeCaching: [

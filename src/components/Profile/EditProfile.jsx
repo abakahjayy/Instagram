@@ -26,6 +26,7 @@ import usePreviewImg from "../../hooks/usePreviewing";
 import useEditProfile from "../../hooks/useEditProfile";
 import API from "../../utils/api";
 import { getAuthToken } from "../../utils/auth";
+import PushNotificationsToggle from "./PushNotificationsToggle";
 
 const EditProfile = ({ isOpen, onClose}) => {
 	const {editProfile, isUpdating }=useEditProfile()
@@ -145,6 +146,8 @@ const EditProfile = ({ isOpen, onClose}) => {
 									</Box>
 									<Switch id='email-notifications' colorScheme='blue' isChecked={emailOn} isDisabled={savingEmailPref} onChange={(e) => toggleEmails(e.target.checked)} />
 								</FormControl>
+
+								<PushNotificationsToggle />
 
 								<Stack spacing={6} direction={["column", "row"]}>
 									<Button

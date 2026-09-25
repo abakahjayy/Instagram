@@ -17,6 +17,7 @@ import ReelsPage from "./pages/Reels/Reels.jsx";
 import PostPage from "./pages/Post/PostPage.jsx";
 import DownloadPage from "./pages/Download/Download.jsx";
 import SendUpdatePage from "./pages/Admin/SendUpdate.jsx";
+import { syncPushSubscription } from "./utils/push.js";
 
 
 export default function App(){
@@ -43,6 +44,7 @@ export default function App(){
             .then(({ data }) => {
                 setAuthUser(data.user);
                 localStorage.setItem("user-info", JSON.stringify({ user: data.user, token }));
+                syncPushSubscription(); // keep this device's notifications linked to this account
             })
             .catch((error) => {
                 if (error.message === "canceled") return;

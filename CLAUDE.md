@@ -110,3 +110,9 @@ Redux Toolkit, react-query, formik, styled-components and tailwind are in `packa
 - `src/firebase/firebase.js` is imported nowhere, and `firebase` is not a declared dependency.
 - `src/components/trys/` holds experiments. `PageLayout` imports `Footer.jsx` but never renders it.
 - `README.md` contains an unresolved git merge conflict.
+
+## Device notifications (Web Push)
+
+`public/push-sw.js` is loaded into the generated service worker (`workbox.importScripts` in vite.config.js). `src/utils/push.js` subscribes this device with app `instagram` through FullBackendd `/api/v1/push`. The switch is `components/Profile/PushNotificationsToggle.jsx`, under Email notifications in Edit profile. `App.jsx` calls `syncPushSubscription()` after the dashboard refresh.
+
+The backend pushes every like, comment, follow and DM, plus welcome and sign-in emails. The service worker hides a notification while the app is focused. On iPhone and iPad it only works once the app is on the Home Screen.
