@@ -34,12 +34,20 @@ const PUBLIC_SITE = "https://instagrammmm-z34p.onrender.com";
 // 2. Installer files. Browsers warn about every APK from outside Google Play and
 //    every .exe that isn't code-signed - nothing on the website can switch that
 //    off - so these are offered second, with honest instructions.
-//    Only Windows gets one on this page (EXE: GitHub Release built from desktop/).
+//    Windows: EXE (GitHub Release built from desktop/). Android: the signed APK in
+//    public/downloads (targets Android 16, runs on Android 5 and newer).
 const EXE = {
 	label: "Download installer (.exe)",
 	href: "https://github.com/abakahjayy/Instagram/releases/latest/download/Nsoro-Setup.exe",
 	size: "78 MB",
 	file: "Nsoro-Setup.exe",
+};
+
+const APK = {
+	label: "Download Android app (.apk)",
+	href: "/downloads/Instagram.apk",
+	size: "1.5 MB",
+	file: "Nsoro.apk",
 };
 
 // Where the "Install app" command lives when the browser doesn't offer the prompt.
@@ -59,9 +67,8 @@ const MENU_STEPS = {
 
 const PLATFORMS = [
 	{
-		// No APK here on purpose: Chrome warns about every APK from outside Google Play.
-		// The browser install is a real Android app (WebAPK) with no warning. The APK
-		// (public/downloads, and the GitHub release) is kept for anyone who needs the file.
+		// The browser install (WebAPK) is the main button: no warning, updates itself.
+		// The APK is offered too, for phones and browsers that can't install from the page.
 		key: "android",
 		name: "Android",
 		icon: FaAndroid,
@@ -69,6 +76,14 @@ const PLATFORMS = [
 			"Open this page in Chrome on your phone and tap “Install Nsoro”.",
 			"No button? Tap ⋮ at the top right → “Add to Home screen” → “Install”.",
 			"Nsoro appears in your app drawer and home screen - no download, no warnings.",
+		],
+		file: APK,
+		fileSteps: [
+			"Tap “Download Android app”. If the browser warns, tap “Download anyway”.",
+			"Open Nsoro.apk from the notification or My Files → Downloads.",
+			"Asked to allow installs from this source? Tap Settings → turn on “Allow from this source” → go back.",
+			"Samsung says the install was blocked (Auto Blocker)? Settings → Security and privacy → Auto Blocker → turn it off, install Nsoro, then turn it back on.",
+			"Play Protect warning? Tap “More details” → “Install anyway”. Then open Nsoro and tap Allow for notifications.",
 		],
 	},
 	{
@@ -127,7 +142,7 @@ function FileDownload({ platform, openByDefault = false }) {
 				rightIcon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
 				onClick={() => setOpen(!open)}
 			>
-				Prefer an installer file? ({f.file === "Instagram.apk" ? ".apk" : ".exe"})
+				Prefer an installer file? ({f.file.endsWith(".apk") ? ".apk" : ".exe"})
 			</Button>
 			<Collapse in={open} animateOpacity>
 				<Box mt={3} p={4} borderRadius='lg' bg='whiteAlpha.100'>
@@ -143,6 +158,7 @@ function FileDownload({ platform, openByDefault = false }) {
 						as='a'
 						href={f.href}
 						download={f.href.startsWith("/") ? f.file : undefined}
+						type={f.file.endsWith(".apk") ? "application/vnd.android.package-archive" : undefined}
 						leftIcon={<DownloadIcon />}
 						variant='outline'
 						w='full'
@@ -249,7 +265,7 @@ export default function DownloadPage() {
 
 						{/* Android phones already see the Install button or the menu steps above */}
 						{current?.steps && current.key !== "android" && <Steps steps={current.steps} />}
-						{current?.file && <FileDownload platform={current} openByDefault={!browserInstallable} />}
+						{current?.file && <FileDownload platform={current} openByDefault={!browserInstallable || current.key === "android"} />}
 						{!current && <Text color='gray.300'>Pick your device below.</Text>}
 					</>
 				)}

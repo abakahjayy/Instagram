@@ -69,12 +69,15 @@ export async function disablePush() {
 
 export const sendTestPush = () => API.post("/api/v1/push/test", { app: APP }).then((r) => r.data.delivered);
 
-/** After sign-in: if this device already allowed notifications, link it to the current account. */
+/**
+ * After sign-in: if this device already allowed notifications (e.g. the Android
+ * app was granted the permission), subscribe it and link it to the current account.
+ */
 export async function syncPushSubscription() {
     try {
-        if (!pushSupported() || Notification.permission !== "granted") return;
+        if (needsInstallForPush() || !pushSupported() || Notification.permission !== "granted") return;
         const reg = await registration();
-        if (reg && await reg.pushManager.getSubscription()) await subscribe(reg);
+        if (reg) await subscribe(reg);
     } catch {
         // best effort
     }

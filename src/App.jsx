@@ -18,6 +18,7 @@ import PostPage from "./pages/Post/PostPage.jsx";
 import DownloadPage from "./pages/Download/Download.jsx";
 import SendUpdatePage from "./pages/Admin/SendUpdate.jsx";
 import { syncPushSubscription } from "./utils/push.js";
+import NotificationPrompt from "./components/NotificationPrompt/NotificationPrompt.jsx";
 
 
 export default function App(){
@@ -182,6 +183,7 @@ export default function App(){
     return <>
             {/* This is for Creating Routes and Pages */}
             <RouterProvider router={router} />
+            {authUser && <NotificationPrompt />}
         </>
 }
 

@@ -11,14 +11,10 @@ self.addEventListener('push', (event) => {
   }
 
   event.waitUntil((async () => {
-    // Don't pop up a notification the user is already looking at (the app shows
-    // updates itself); test notifications always show.
+    // Always show it, even while the app is open, so it lands in the phone's
+    // notification bar and history (and Chrome requires a notification per push).
     const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-    const inFocus = windows.some((w) => w.focused && w.visibilityState === 'visible');
-    if (inFocus && data.tag !== 'test') {
-      windows.forEach((w) => w.postMessage({ type: 'push', data }));
-      return;
-    }
+    windows.forEach((w) => w.postMessage({ type: 'push', data }));
     await self.registration.showNotification(data.title || 'Nsoro', {
       body: data.body || '',
       icon: data.icon || '/icons/icon-192.png',
