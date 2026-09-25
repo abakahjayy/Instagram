@@ -43,8 +43,8 @@ export default function ProfilePost({post}) {
 		if (isDeleting) return;
     setIsDeleting(true);
 		try {
-			const response =await API.delete(`/api/v1/posts/image/${post.postId}/?userId=${userProfile?.user._id}`,{
-      })
+			// logged-in route: only the author can delete
+			const response =await API.delete(`/api/v1/instagram/posts/${post._id}`)
       let posts = response.data
       console.log(posts)
 			deletePost(posts.user);

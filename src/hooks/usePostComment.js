@@ -27,10 +27,8 @@ const usePostComment = () => {
 		};
 
 		try {
-			const response =await API.post(`/api/v1/comments/${postId}`,{
-                text:comment,
-                userId: authUser._id,
-            })
+			// logged-in route: the commenter comes from the token
+			const response =await API.post(`/api/v1/instagram/posts/${postId}/comments`,{ text: comment })
             const comments = response.data
             // console.log(comments?.newComment?._id)
 			addComment(postId, comments?.newComment);

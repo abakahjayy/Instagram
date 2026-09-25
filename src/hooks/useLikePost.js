@@ -19,15 +19,12 @@ const useLikePost = (post) => {
 
 		try {
 			if(!isLiked){
-				const response =await API.patch(`/api/v1/posts/${post?._id}/like`,{
-					userId: authUser?._id,
-				})
+				// logged-in route: the backend takes who's liking from the token
+				const response =await API.patch(`/api/v1/instagram/posts/${post?._id}/like`)
 				const dta = response.data
 				// console.log(dta)
 			}else {
-				const response =await API.patch(`/api/v1/posts/${post?._id}/unlike`,{
-					userId: authUser?._id,
-				})
+				const response =await API.patch(`/api/v1/instagram/posts/${post?._id}/unlike`)
 				const dta = response.data
 				// console.log(dta)
 			}

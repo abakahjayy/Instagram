@@ -22,11 +22,11 @@ const useFollowUser = (userId) => {
             // console.log('userId:',userId)
             if (isFollowing) {
                 // unfollow
-                const datas=await API.patch(`/api/v1/users/${user._id}/unfollow`,{userId})
+                const datas=await API.patch(`/api/v1/instagram/users/${userId}/unfollow`)
                 const frs=await datas.data
                 console.log(frs)
                 if(frs.error){
-                    throw new Error(fr.error)
+                    throw new Error(frs.error)
                 }
                 // console.log(frs)
 				setAuthUser({
@@ -42,7 +42,7 @@ const useFollowUser = (userId) => {
 
             } else {
                 // follow
-                const data=await API.patch(`/api/v1/users/${user._id}/follow`,{userId})
+                const data=await API.patch(`/api/v1/instagram/users/${userId}/follow`)
                 const fr=await data.data
                 if(fr.error){
                     throw new Error(fr.error)

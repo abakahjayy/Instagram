@@ -25,6 +25,7 @@ import useAuthStore from "../../store/useAuthStore";
 import usePostStore from "../../store/usePostStore";
 import useProfileStore from "../../store/userProfileStore";
 import { useLocation } from "react-router-dom";
+import { getAuthToken } from "../../utils/auth";
 
 const CreatePost = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -160,8 +161,10 @@ function useCreatePost() {
 
 		try {
 			formDatas2.append('caption',caption)
-			const data=await fetch(`${apiUrl}/api/v1/posts/?userId=${authUser._id}`,{
+			// logged-in route: the author comes from the token, not the URL
+			const data=await fetch(`${apiUrl}/api/v1/instagram/posts`,{
 				method: 'POST',
+				headers: { Authorization: `Bearer ${getAuthToken()}` },
 				body: formDatas2,
 			})
 			const fr=await data.json()

@@ -2,73 +2,57 @@ import { useState } from "react";
 import useAuthStore from "../store/useAuthStore";
 import useShowToast from "./useShowToast";
 import useProfileStore from "../store/userProfileStore";
-import {useUpdatePic} from '../utils/uploadImage'
 import API from "../utils/api";
-import axios from "axios";
-// import { token } from "morgan";
 
+// Saves Edit profile through the logged-in routes: the backend updates the account
+// in the login token (PATCH /instagram/me, /instagram/me/photo), never one named in the URL.
 const useEditProfile = () => {
 	const [isUpdating, setIsUpdating] = useState(false);
 	const authUser = useAuthStore((state) => state.user);
-	const setAuthUser= useAuthStore((state)=>state.setAuthUser)
-	const setUserProfile = useProfileStore((state) => state.setUserProfile);
+	const setAuthUser = useAuthStore((state) => state.setAuthUser);
+	const { userProfile, setUserProfile } = useProfileStore();
 	const showToast = useShowToast();
-    const apiUrl = import.meta.env.VITE_API_URL
-    // console.log(authUser)
-	const editProfile = async (inputs, selectedFile,formDatas,username,tokens) => {
-        // console.log(formDatas.get('profile_pictures'))
-		if (isUpdating || !authUser) return;
+
+	// Signature kept for EditProfile.jsx: (inputs, selectedFile, formDatas, username, token)
+	const editProfile = async (inputs, selectedFile, formDatas) => {
+		const current = authUser?.user || authUser;
+		if (isUpdating || !current) return;
 		setIsUpdating(true);
-        showToast("Updating",'', "loading");
-        let pictureId = "";
 		try {
-			if (selectedFile) {
-                // Upload the image
-                const data=await fetch(`${apiUrl}/api/v1/userse/${username}/editUserProfile`,{
-                    method: 'PATCH',
-                    body: formDatas,
-                })
-                const fr=await data.json()
-                pictureId=fr.user.profile_picture_id
+			let user = current;
+			const file = selectedFile && formDatas?.get("profile_pictures");
+			if (file) {
+				const photo = new FormData();
+				photo.append("photo", file);
+				user = (await API.patch("/api/v1/instagram/me/photo", photo)).data.user;
 			}
-            // console.log(pictureId)
 
-			const updatedUser = {
-				...authUser,
-				firstName: inputs.firstName || authUser.firstName,
-				lastName: inputs.lastName || authUser.lastName,
-				username: inputs.username || authUser.username,
-				usernames: inputs.username || authUser.username,
-				bio: inputs.bio || authUser.bio,
-				profile_picture_id: pictureId || authUser.profile_picture_id,
-                token:tokens,
-			};
+			const changes = {};
+			for (const key of ["firstName", "lastName", "username", "bio"]) {
+				const value = inputs[key]?.trim();
+				if (value && value !== current[key]) changes[key] = value;
+			}
+			if (Object.keys(changes).length) user = (await API.patch("/api/v1/instagram/me", changes)).data.user;
 
-            const data=await API.patch(`/api/v1/users/${username}/editUser`,{
-                updatedUser,
-            })
-            const fr=await data.data
-            console.log(fr)
+			setAuthUser({ ...current, ...user });
+			try {
+				const stored = JSON.parse(localStorage.getItem("user-info")) || {};
+				localStorage.setItem("user-info", JSON.stringify({ ...stored, user: { ...current, ...user } }));
+			} catch {
+				/* storage unavailable */
+			}
+			showToast("Profile updated", "", "success", 2000);
 
-            if(fr.error){
-                throw new Error(fr.error);
-            }
-			// localStorage.setItem("user-info", JSON.stringify({user:fr.user,token:tokens}));
-			// localStorage.removeItem("user-info");
-			fr.user&&setAuthUser(updatedUser);
-            // console.log(authUser)
-			setUserProfile(fr.user);
-            setTimeout(()=>{
-                showToast("Success", "Profile updated successfully", "success");
-            },3500)
-            fr.user&&window.location.reload();
-            setIsUpdating(false);
+			if (changes.username) {
+				window.location.assign(`/${changes.username}`); // the profile address changed
+			} else if (userProfile?.user?._id === current._id) {
+				setUserProfile({ ...userProfile, user: { ...userProfile.user, ...user } });
+			}
 		} catch (error) {
-            const message = error.response?.data?.error || error.message
-            setTimeout(()=>{
-                showToast("Error", message, "error");
-            },3500)
-            setIsUpdating(false);
+			showToast("Couldn't update profile", error.response?.data?.error || error.message, "error");
+			throw error;
+		} finally {
+			setIsUpdating(false);
 		}
 	};
 
