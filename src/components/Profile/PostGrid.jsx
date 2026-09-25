@@ -34,7 +34,7 @@ export default function PostGrid({ posts, emptyText = "No posts yet." }) {
 
 			<Modal isOpen={!!openPost} onClose={() => setOpenPost(null)} size={{ base: "full", md: "xl" }} scrollBehavior='inside'>
 				<ModalOverlay />
-				<ModalContent bg='black'>
+				<ModalContent bg='ig.bg'>
 					<ModalCloseButton zIndex={2} />
 					<ModalBody pt={10}>{openPost && <FeedPost post={openPost} />}</ModalBody>
 				</ModalContent>

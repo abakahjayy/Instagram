@@ -6,6 +6,7 @@ import CreatePost from "../SideBar/CreatePost";
 import ProfileLink from "../SideBar/ProfileLink";
 import { UnreadBadge } from "../SideBar/Notifications";
 import useNotificationStore from "../../store/useNotificationStore";
+import useInboxStore from "../../store/useInboxStore";
 
 // Phone layout (below the `md` breakpoint), like the Instagram app: a top bar with the
 // logo + activity/messages, and a fixed bottom tab bar. PageLayout hides the sidebar there.
@@ -20,6 +21,7 @@ const IconLink = ({ to, label, children }) => (
 
 export function MobileTopBar() {
 	const unread = useNotificationStore((state) => state.unread);
+	const unreadMessages = useInboxStore((state) => state.unread);
 	return (
 		<Flex
 			display={{ base: "flex", md: "none" }}
@@ -30,9 +32,9 @@ export function MobileTopBar() {
 			px={3}
 			alignItems='center'
 			justifyContent='space-between'
-			bg='black'
+			bg='ig.bg'
 			borderBottom='1px solid'
-			borderColor='whiteAlpha.300'
+			borderColor='ig.border'
 		>
 			<Link as={RouterLink} to='/' aria-label='Home' transform='scale(0.8)' transformOrigin='left center'>
 				<InstagramLogo />
@@ -45,7 +47,10 @@ export function MobileTopBar() {
 					</Box>
 				</IconLink>
 				<IconLink to='/messages' label='Messages'>
-					<MessagesLogo />
+					<Box position='relative'>
+						<MessagesLogo />
+						<UnreadBadge count={unreadMessages} />
+					</Box>
 				</IconLink>
 			</Flex>
 		</Flex>
@@ -63,9 +68,9 @@ export function MobileBottomNav({ authUser, onLogout }) {
 			zIndex={20}
 			h={MOBILE_BOTTOM_BAR_H}
 			pb='env(safe-area-inset-bottom)'
-			bg='black'
+			bg='ig.bg'
 			borderTop='1px solid'
-			borderColor='whiteAlpha.300'
+			borderColor='ig.border'
 			alignItems='center'
 			justifyContent='space-around'
 		>

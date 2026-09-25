@@ -40,7 +40,8 @@ const PostHeader = ({ post, creatorProfile,profileImageUrl,imageLoading }) => {
                         <Box color={"gray.500"}>• {timeAgo(post.created)}</Box>
                     </Flex>
                 </Flex>
-                {UseAuth &&creatorProfile && creatorProfile.username&&visitingAnotherProfileAndAuth&&(<Box cursor={"pointer"}>
+                {/* Instagram only offers "Follow" on posts from people you do not follow yet */}
+                {UseAuth &&creatorProfile && creatorProfile.username&&visitingAnotherProfileAndAuth&&!isFollowing&&(<Box cursor={"pointer"}>
                     <Button
                         size={"xs"}
                         bg={"transparent"}
@@ -54,7 +55,7 @@ const PostHeader = ({ post, creatorProfile,profileImageUrl,imageLoading }) => {
                         onClick={handleFollowUser}
                         isLoading={isUpdating}
                     >
-                        {isFollowing ? "Unfollow" : "Follow"}
+                        Follow
                     </Button>
                 </Box>)}
             </Flex>

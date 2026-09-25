@@ -40,11 +40,13 @@ const useConversations = () => {
 		socket?.on("receiveMessage", refresh);
 		socket?.on("messageUpdated", refresh);
 		socket?.on("messageDeleted", refresh);
+		window.addEventListener("inbox:refresh", refresh); // a chat was marked read
 		return () => {
 			controller.abort();
 			socket?.off("receiveMessage", refresh);
 			socket?.off("messageUpdated", refresh);
 			socket?.off("messageDeleted", refresh);
+			window.removeEventListener("inbox:refresh", refresh);
 		};
 	}, [load, token]);
 

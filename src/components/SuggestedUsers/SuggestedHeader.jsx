@@ -1,34 +1,39 @@
-import { Avatar, Button, Flex,Text } from "@chakra-ui/react";
-import useAuthStore from "../../store/useAuthStore";
-import { Link } from "react-router-dom";
+import { Avatar, Box, Button, Flex, Link, Text } from "@chakra-ui/react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { avatarUrl } from "../../utils/media";
 
-export default function SuggestedHeader({user,onLogout}) {
-        // const url =user.profile_picture_id?ProfileUrl(user.profile_picture_id):'';
-        // console.log(user)
-        const {isLoading} = useAuthStore()
-        return (
-            <Flex justifyContent={'space-between'} alignItems={'center'} w={'full'}>
-                <Flex alignItems={'center'} gap={2}>
-                    <Link to={`${user.username}`}>
-                        <Avatar src={avatarUrl(user)} name={user.username} size={'lg'} referrerPolicy='no-referrer'/>
-                    </Link>
-                    <Text fontSize={13} fontWeight={'bold'}>
-                        {user.username}
-                    </Text>
-                </Flex>
-                <Button
-                bg={'transparent'}
-                size={'xs'}
-                fontSize={14}
-                fontWeight={'medium'} color={'blue.400'} cursor={'pointer'}
-                _hover={{color:'white'}}
-                isLoading={isLoading}
-                onClick={()=>{
-                    onLogout(user._id);
-                }}>
-                    Log out
-                </Button>
-            </Flex>
-        )
+// Your account at the top of the right column, with Instagram's "Switch".
+export default function SuggestedHeader({ user, onLogout }) {
+	const navigate = useNavigate();
+	const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ");
+	return (
+		<Flex w='full' alignItems='center' gap={3}>
+			<Link as={RouterLink} to={`/${user.username}`} flexShrink={0}>
+				<Avatar src={avatarUrl(user)} name={user.username} w='44px' h='44px' referrerPolicy='no-referrer' />
+			</Link>
+			<Box flex={1} minW={0}>
+				<Link as={RouterLink} to={`/${user.username}`} fontWeight='semibold' fontSize='sm' noOfLines={1}>
+					{user.username}
+				</Link>
+				<Text fontSize='sm' color='ig.secondary' noOfLines={1}>
+					{fullName}
+				</Text>
+			</Box>
+			<Button
+				variant='unstyled'
+				h='auto'
+				minW={0}
+				fontSize='xs'
+				fontWeight='semibold'
+				color='ig.link'
+				_hover={{ color: "white" }}
+				onClick={() => {
+					onLogout(user._id);
+					navigate("/auth");
+				}}
+			>
+				Switch
+			</Button>
+		</Flex>
+	);
 }

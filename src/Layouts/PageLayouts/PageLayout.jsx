@@ -7,6 +7,8 @@ import { MobileBottomNav, MobileTopBar, MOBILE_BOTTOM_BAR_H } from "../../compon
 import { useLocation } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore.js";
 import { useNotificationsSync } from "../../hooks/useNotifications.js";
+import { useInboxSync } from "../../hooks/useInboxSync.js";
+import MessagesPill from "../../components/NavBar/MessagesPill.jsx";
 
 const PageLayout = ({ authUser, onLogout, children }) => {
     const {isLoading } = useAuthStore()
@@ -21,6 +23,8 @@ const PageLayout = ({ authUser, onLogout, children }) => {
     // Reels are full-bleed on phones: no top bar, just the bottom tabs (like the app).
     const showMobileTopBar = showMobileBars && pathname !== "/reels";
     useNotificationsSync(!!canRenderSidebar);
+    useInboxSync(!!canRenderSidebar);
+    const inMessages = pathname.startsWith("/messages");
     if (checkingUserIsAuth) return <PageLayoutSpinner />;
     return (
             <Flex flexDir={canRenderNavbar ? "column" : "row"}>
@@ -40,6 +44,8 @@ const PageLayout = ({ authUser, onLogout, children }) => {
                     {children}
                 </Box>
                 {showMobileBars && <MobileBottomNav authUser={authUser} onLogout={onLogout} />}
+                {/* instagram.com's floating Messages pill - tablets and up, not on the messages pages */}
+                {canRenderSidebar && !inMessages && <MessagesPill />}
 
                 {/* Portfolio badge - this is a clone/demo project */}
                 <Link
@@ -49,7 +55,9 @@ const PageLayout = ({ authUser, onLogout, children }) => {
                     bottom={{ base: showMobileBars ? "68px" : 4, md: 4 }}
                     right={4}
                     zIndex={1000}
-                    display={inChat || pathname === "/reels" ? { base: "none", md: "flex" } : "flex"}
+                    // phones only when signed in: on bigger screens the Messages pill takes this corner and
+                    // the credit lives in the More menu + page footer
+                    display={inChat || pathname === "/reels" ? "none" : canRenderSidebar ? { base: "flex", md: "none" } : "flex"}
                     alignItems="center"
                     gap={1}
                     px={3}

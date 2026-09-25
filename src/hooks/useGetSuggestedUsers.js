@@ -1,51 +1,42 @@
 import { useEffect, useState } from "react";
 import useAuthStore from "../store/useAuthStore";
-import useShowToast from "./useShowToast";
 import API from "../utils/api";
 
-
-const useGetSuggestedUsers = (useri) => {
+// "Suggested for you": people you don't follow yet, most mutual connections first.
+// Each gets `mutuals` - usernames of people you follow who follow them - for
+// Instagram's "Followed by x + 2 more" line.
+const useGetSuggestedUsers = (me) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [suggestedUsers, setSuggestedUsers] = useState([]);
 	const authUser = useAuthStore((state) => state.user);
-	// console.log(useri)
-	// console.log(authUser)
-	const showToast = useShowToast();
+	const myId = me?._id;
+	const followingKey = (me?.following || []).map(String).join(",");
 
 	useEffect(() => {
-        const controller = new AbortController();
-		const getSuggestedUsers = async () => {
-			setIsLoading(true);
-			try {
-                const response =await API.get(`/api/v1/users/`,{
-                    signal: controller.signal,
-                })
-                let users = response.data.users
+		if (!myId) return;
+		const controller = new AbortController();
+		const following = new Set(followingKey ? followingKey.split(",") : []);
+		setIsLoading(true);
+		API.get(`/api/v1/users/`, { signal: controller.signal, params: { limit: 30 } })
+			.then(({ data }) => {
+				const people = data.users
+					.filter((u) => u._id !== myId && !following.has(u._id))
+					.map((u) => ({
+						...u,
+						mutuals: (u.followers || [])
+							.filter((f) => f && following.has(String(f._id || f)))
+							.map((f) => f.username)
+							.filter(Boolean),
+					}))
+					.sort((a, b) => b.mutuals.length - a.mutuals.length)
+					.slice(0, 5);
+				setSuggestedUsers(people);
+			})
+			.catch(() => {}) // the sidebar just stays empty
+			.finally(() => setIsLoading(false));
+		return () => controller.abort();
+	}, [myId, followingKey, authUser]);
 
-				users = users.filter(f => f._id !== authUser._id);
-				users&&users.forEach((user,index) =>{
-					useri.following.forEach((following)=>{
-							if(user._id===following){
-								users.splice(index,1)
-							}
-						})
-					
-				})
-				setSuggestedUsers(users);
-			} catch (error) {
-				const message = error.response?.data?.error || error.message
-				if(error.message==='canceled')return
-			    showToast("Error", message, "error");
-				console.log(error)
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		if (authUser) getSuggestedUsers();
-        return ()=>{//This is a cleanup function
-            controller.abort();
-        }
-	}, [authUser, showToast]);
 	return { isLoading, suggestedUsers };
 };
 

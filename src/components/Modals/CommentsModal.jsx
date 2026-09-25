@@ -41,7 +41,7 @@ const CommentsModal = ({ isOpen, onClose, post }) => {
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={{ base: "full", md: "md" }}>
 			<ModalOverlay />
-			<ModalContent bg={"black"} border={{ base: "none", md: "1px solid gray" }} maxW={{ base: "100vw", md: "400px" }}>
+			<ModalContent bg={"ig.surface"} border={{ base: "none", md: "1px solid" }} borderColor='ig.border' maxW={{ base: "100vw", md: "400px" }}>
 				<ModalHeader>Comments</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody pb={6}>
@@ -90,7 +90,7 @@ export default CommentsModal;
 // 	return (
 // 		<Modal isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={{ base: "full", md: "md" }}>
 // 			<ModalOverlay />
-// 			<ModalContent bg={"black"} border={{ base: "none", md: "1px solid gray" }} maxW={{ base: "100vw", md: "400px" }}>
+// 			<ModalContent bg={"ig.surface"} border={{ base: "none", md: "1px solid" }} borderColor='ig.border' maxW={{ base: "100vw", md: "400px" }}>
 // 				<ModalHeader>Comments</ModalHeader>
 // 				<ModalCloseButton />
 // 				<ModalBody pb={6}>

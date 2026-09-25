@@ -1,8 +1,10 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { BsBookmark, BsGrid3X3, BsSuitHeart } from "react-icons/bs";
+import { ReelsLogo } from "../../assets/constants";
 
 const TABS = [
 	{ key: "posts", label: "Posts", icon: <BsGrid3X3 /> },
+	{ key: "reels", label: "Reels", icon: <ReelsLogo /> },
 	{ key: "saved", label: "Saved", icon: <BsBookmark />, ownerOnly: true },
 	{ key: "likes", label: "Likes", icon: <BsSuitHeart /> },
 ];

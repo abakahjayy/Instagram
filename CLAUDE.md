@@ -93,7 +93,17 @@ Redux Toolkit, react-query, formik, styled-components and tailwind are in `packa
 
 **Emails.** The email on/off switch is in EditProfile (PATCH `/api/v1/instagram/settings/email`). `/admin/updates` sends an app-update email to everyone; it's only for `user.role === "admin"`, set with the backend's `scripts/makeInstagramAdmin.js`.
 
-**Theme and PWA.** `main.jsx` sets up the Chakra theme (dark mode by default, black body background) and registers `/sw.js`. `vite.config.js` also configures `vite-plugin-pwa`, whose manifest still carries leftover "Amazon React" naming.
+**Look and layout (matches instagram.com, 2026).**
+- **Colours:** theme tokens in `main.jsx`: `ig.bg` #0c1014, `ig.surface`, `ig.border`, `ig.secondary`, `ig.link`. Use them instead of "black" for app chrome; media areas (photos, reels, stories) stay black.
+- **Sidebar order:** Home, Reels, Messages (unread badge from `store/useInboxStore`, kept fresh by `useInboxSync`), Search, Notifications, Create, Profile, then the ☰ More menu (`SideBar/MoreMenu.jsx`: Saved, Get the app, Send an update for admins, About, Switch accounts, Log out).
+- **Floating Messages pill:** `NavBar/MessagesPill`, shown on tablets and up.
+- **Right column:** `SuggestedUsers` shows your account with Switch, suggestions with "Followed by …", and the footer links.
+- **Messages:** `pages/Messages/Messages.jsx` handles both `/messages` and `/messages/:id`. It is two-pane (inbox plus chat) on tablets and up and one screen at a time on phones, and has a New message search modal.
+- **Unread updates:** `useChat` dispatches a window `inbox:refresh` event after marking a conversation read.
+- **Security:** API calls send the login token through an axios interceptor (`utils/api.js`). Social actions use the backend's logged-in `/api/v1/instagram/*` routes.
+- **Security headers** (CSP, X-Frame-Options, etc.) are set in Render → instagrammmm → Headers. The CSP only allows `fullbackendd.onrender.com` for API, socket and media calls, so a new backend or media host must be added there.
+
+ `main.jsx` sets up the Chakra theme (dark mode by default, black body background) and registers `/sw.js`. `vite.config.js` also configures `vite-plugin-pwa`, whose manifest still carries leftover "Amazon React" naming.
 
 ## Dead or legacy code
 

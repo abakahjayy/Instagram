@@ -5,25 +5,17 @@ import ProfileLink from "./ProfileLink";
 import Search from "./Search";
 import Messages from './MessagesLink'
 import ReelsLink from './ReelsLink'
-import { ChatGptLogo ,UpgradeLogo, MoreLogo,NewChatLogo,SearchLogos,HideSideBarLogo,MicLogo,ArrowDropLogo} from "../../assets/constants";
 
+// Same order as instagram.com's left rail (2026).
 const SidebarItems = ({authUser,onLogout}) => {
 	return (
 		<>
-			{/* <ChatGptLogo/>
-			<UpgradeLogo/>
-			<MoreLogo/>
-			<NewChatLogo/>
-			<SearchLogos/>
-			<HideSideBarLogo/>
-			<MicLogo/>
-			<ArrowDropLogo/> */}
 			<Home authUser={authUser} onLogout={onLogout} />
-			<Search authUser={authUser} onLogout={onLogout}/>
 			<ReelsLink />
+			<Messages authUser={authUser} onLogout={onLogout}/>
+			<Search authUser={authUser} onLogout={onLogout}/>
 			<Notifications authUser={authUser} onLogout={onLogout}/>
 			<CreatePost authUser={authUser} onLogout={onLogout}/>
-			<Messages authUser={authUser} onLogouot={onLogout}/>
 			<ProfileLink authUser={authUser} onLogout={onLogout} />
 		</>
 	);

@@ -1,5 +1,5 @@
 import { Container, Flex, Link, Skeleton, SkeletonCircle, Text, VStack } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import ProfileHeader from "../../components/Profile/ProfileHeader";
 import ProfileTabs from "../../components/Profile/ProfileTabs";
 import ProfilePosts from "../../components/Profile/ProfilePosts";
@@ -21,8 +21,10 @@ export function ProfilePage ({authUser,onLogout}){
 	const userNotFound = !isLoading && !userProfile;
     const user=authUser?.user?authUser.user:authUser
 	const isOwner = !!user && user.username === username;
-	const [tab, setTab] = useState("posts");
-	useEffect(() => setTab("posts"), [username]);
+	// ?tab=saved (from the More menu) opens that tab; otherwise Posts
+	const [searchParams] = useSearchParams();
+	const [tab, setTab] = useState(searchParams.get("tab") || "posts");
+	useEffect(() => setTab(searchParams.get("tab") || "posts"), [username, searchParams]);
 	if (userNotFound) return <UserNotFound />;
 	// console.log(user);
 
@@ -42,6 +44,7 @@ export function ProfilePage ({authUser,onLogout}){
 			>
 				<ProfileTabs active={tab} onChange={setTab} isOwner={isOwner} />
 				{userProfile && tab === "posts" && <ProfilePosts user={userProfile.user}/>}
+				{userProfile && tab === "reels" && <UserReels userId={userProfile.user._id} />}
 				{userProfile && tab === "saved" && isOwner && <SavedPosts savedCount={user?.saved?.length || 0} />}
 				{userProfile && tab === "likes" && <LikedPosts userId={userProfile.user._id} />}
 			</Flex>
@@ -59,6 +62,20 @@ function SavedPosts({ savedCount }) {
 		return () => controller.abort();
 	}, [savedCount]);
 	return <PostGrid posts={posts} emptyText='Save posts you want to see again - only you can see what you’ve saved.' />;
+}
+
+// The person's video posts, like the Reels tab on an Instagram profile.
+function UserReels({ userId }) {
+	const [posts, setPosts] = useState(null);
+	useEffect(() => {
+		const controller = new AbortController();
+		setPosts(null);
+		API.get(`/api/v1/posts/user/${userId}`, { signal: controller.signal })
+			.then(({ data }) => setPosts(data.posts.filter((p) => p.mediaType === "video")))
+			.catch((e) => e.message !== "canceled" && setPosts([]));
+		return () => controller.abort();
+	}, [userId]);
+	return <PostGrid posts={posts} emptyText='No reels yet.' />;
 }
 
 function LikedPosts({ userId }) {

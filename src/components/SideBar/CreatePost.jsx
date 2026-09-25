@@ -74,7 +74,7 @@ const CreatePost = () => {
 			<Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "xl" }} scrollBehavior='inside'>
 				<ModalOverlay />
 
-				<ModalContent bg={"black"} border={"1px solid gray"}>
+				<ModalContent bg={"ig.surface"} border={"1px solid"} borderColor='ig.border'>
 					<ModalHeader>Create Post</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody pb={6}>

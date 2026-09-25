@@ -73,9 +73,9 @@ export default function ChatPage() {
 	};
 
 	return (
-		<Flex direction='column' h='100dvh' maxW='container.sm' mx='auto'>
-			<Flex alignItems='center' gap={3} px={4} py={3} borderBottom='1px solid' borderColor='whiteAlpha.300'>
-				<IconButton as={RouterLink} to='/messages' icon={<ArrowBackIcon />} aria-label='Back to messages' variant='ghost' size='sm' />
+		<Flex direction='column' h='100dvh' w='full'>
+			<Flex alignItems='center' gap={3} px={4} py={3} borderBottom='1px solid' borderColor='ig.border'>
+				<IconButton as={RouterLink} to='/messages' icon={<ArrowBackIcon />} aria-label='Back to messages' variant='ghost' size='sm' display={{ base: "inline-flex", md: "none" }} />
 				<Avatar src={profileImageUrl || undefined} referrerPolicy='no-referrer' name={userProfile?.username} size='sm' />
 				{userProfile ? (
 					<Link as={RouterLink} to={`/${userProfile.username}`} fontWeight='bold'>

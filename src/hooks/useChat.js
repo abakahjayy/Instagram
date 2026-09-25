@@ -27,7 +27,10 @@ const useChat = (otherUserId) => {
 	);
 
 	const markRead = useCallback(() => {
-		API.patch(`/api/v1/messages/conversations/${otherUserId}/read`, null, { headers: auth() }).catch(() => {});
+		// once saved, tell the inbox list and the unread badges to refresh
+		API.patch(`/api/v1/messages/conversations/${otherUserId}/read`, null, { headers: auth() })
+			.then(() => window.dispatchEvent(new Event("inbox:refresh")))
+			.catch(() => {});
 	}, [otherUserId]);
 
 	// History

@@ -12,7 +12,7 @@ const RING = "linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5
 function StoryAvatar({ user, seen, hasStories, size = "62px", children }) {
 	return (
 		<Box position='relative' p='3px' borderRadius='full' bg={hasStories ? (seen ? "whiteAlpha.400" : RING) : "transparent"}>
-			<Box p='2px' borderRadius='full' bg='black'>
+			<Box p='2px' borderRadius='full' bg='ig.bg'>
 				<Avatar w={size} h={size} src={avatarUrl(user)} name={user?.username} referrerPolicy='no-referrer' />
 			</Box>
 			{children}

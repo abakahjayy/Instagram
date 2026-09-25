@@ -37,14 +37,24 @@ const PostFooter = ({ post, isProfilePage, creatorProfile, likeState }) => {
 
 	return (
 		<Box mb={{ base: 6, md: 10 }} marginTop={"auto"}>
-			<Flex alignItems={"center"} gap={4} w={"full"} pt={0} mb={2} mt={{ base: 2, md: 4 }}>
-				<Box as='button' aria-label={isLiked ? "Unlike" : "Like"} onClick={handleLikePost} fontSize={18}>
+			{/* instagram.com (2026): counts sit right next to the like and comment icons */}
+			<Flex alignItems={"center"} gap={4} w={"full"} pt={0} mb={2} mt={{ base: 2, md: 3 }}>
+				<Flex as='button' aria-label={isLiked ? "Unlike" : "Like"} onClick={handleLikePost} fontSize={18} alignItems='center' gap={1.5}>
 					{!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
-				</Box>
+					{likes > 0 && <Text as='span' fontSize='sm' fontWeight='semibold'>{likes}</Text>}
+				</Flex>
 
-				<Box as='button' aria-label='Comment' fontSize={18} onClick={() => commentRef.current?.focus()}>
+				<Flex
+					as='button'
+					aria-label='Comment'
+					fontSize={18}
+					alignItems='center'
+					gap={1.5}
+					onClick={() => (isProfilePage ? commentRef.current?.focus() : onOpen())}
+				>
 					<CommentLogo />
-				</Box>
+					{post?.comments?.length > 0 && <Text as='span' fontSize='sm' fontWeight='semibold'>{post.comments.length}</Text>}
+				</Flex>
 
 				<Box as='button' aria-label='Share' fontSize={22} onClick={handleShare}>
 					<FiSend />
@@ -60,9 +70,12 @@ const PostFooter = ({ post, isProfilePage, creatorProfile, likeState }) => {
 					{isSaved ? <BsBookmarkFill /> : <BsBookmark />}
 				</Box>
 			</Flex>
-			<Text fontWeight={600} fontSize={"sm"}>
-				{likes} {likes === 1 ? "like" : "likes"}
-			</Text>
+			{/* the post modal on a profile keeps the classic "n likes" line */}
+			{isProfilePage && (
+				<Text fontWeight={600} fontSize={"sm"}>
+					{likes} {likes === 1 ? "like" : "likes"}
+				</Text>
+			)}
 
 			{isProfilePage && (
 				<Text fontSize='12' color={"gray"}>

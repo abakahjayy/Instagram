@@ -11,7 +11,6 @@ import MessagesPage from './pages/Messages/Messages';
 import useLogout from "./hooks/useLogout.js";
 import { Flex, Spinner } from "@chakra-ui/react";
 import useShowToast from "./hooks/useShowToast.js";
-import ChatPage from "./pages/Messages/Chat.jsx";
 import SearchPage from "./pages/Search/Search.jsx";
 import NotificationsPage from "./pages/Notifications/Notifications.jsx";
 import ReelsPage from "./pages/Reels/Reels.jsx";
@@ -159,7 +158,8 @@ export default function App(){
             path: '/messages/:id',
             element: (
                 <PageLayout authUser={authUser} onLogout={handleLogout}>
-                    {authUser ? <ChatPage /> : <Navigate to="/auth" />}
+                    {/* same page as /messages: inbox + open chat side by side on tablets and up */}
+                    {authUser ? <MessagesPage /> : <Navigate to="/auth" />}
                 </PageLayout>
             ),
         },

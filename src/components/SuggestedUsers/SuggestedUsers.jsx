@@ -1,82 +1,72 @@
-import { VStack,Flex, Text,Button, Box ,Link, SkeletonCircle,Skeleton} from "@chakra-ui/react"
-import SuggestedUser from "./SuggestedUser"
-import SuggestedHeader from "./SuggestedHeader"
-import { Link as RouterLink } from "react-router-dom"
-import useAuthStore from "../../store/useAuthStore";
-import useGetSuggestedUsers from "../../hooks/useGetSuggestedUsers"
+import { Box, Flex, Link, Skeleton, SkeletonCircle, Text, VStack } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import SuggestedUser from "./SuggestedUser";
+import SuggestedHeader from "./SuggestedHeader";
+import useGetSuggestedUsers from "../../hooks/useGetSuggestedUsers";
 
-export default function SuggestedUsers({authUser,onLogout}) {
-    const user=authUser.user?authUser.user:authUser
-    const { isLoading, suggestedUsers }=useGetSuggestedUsers(user)
-    const setAuthUser= useAuthStore((state)=>state.setAuthUser)
-    // suggestedUsers[0]&&console.log(suggestedUsers)
+const FOOTER_LINKS = [
+	{ label: "About", href: "https://portfolio-8jmo.onrender.com/" },
+	{ label: "Get the app", to: "/download" },
+	{ label: "Search", to: "/search" },
+	{ label: "Reels", to: "/reels" },
+	{ label: "Messages", to: "/messages" },
+];
 
-    if (isLoading) return <CommentSkeleton />;
-    return (
-        <VStack py={8} px={6} gap={4} >
-            <SuggestedHeader user={user} onLogout={onLogout}/>
-            {suggestedUsers.length !== 0 && (
-				<Flex alignItems={"center"} justifyContent={"space-between"} w={"full"}>
-					<Text fontSize={12} fontWeight={"bold"} color={"gray.500"}>
+// instagram.com's right column: your account, "Suggested for you", footer links.
+export default function SuggestedUsers({ authUser, onLogout }) {
+	const user = authUser.user ? authUser.user : authUser;
+	const { isLoading, suggestedUsers } = useGetSuggestedUsers(user);
+
+	return (
+		<VStack pt={9} px={4} spacing={4} align='stretch'>
+			<SuggestedHeader user={user} onLogout={onLogout} />
+
+			{(isLoading || suggestedUsers.length > 0) && (
+				<Flex alignItems='center' justifyContent='space-between' mt={2}>
+					<Text fontSize='sm' fontWeight='semibold' color='ig.secondary'>
 						Suggested for you
 					</Text>
-					<Text fontSize={12} fontWeight={"bold"} _hover={{ color: "gray.400" }} cursor={"pointer"}>
-						See All
-					</Text>
+					<Link as={RouterLink} to='/search' fontSize='xs' fontWeight='semibold' _hover={{ color: "ig.secondary" }}>
+						See all
+					</Link>
 				</Flex>
 			)}
 
-			{suggestedUsers[0]&&suggestedUsers.map((user) => (
-				<SuggestedUser user={user} setUser={setAuthUser} key={user._id} />
-			))}
+			{isLoading &&
+				[0, 1, 2, 3].map((i) => (
+					<Flex key={i} gap={3} alignItems='center'>
+						<SkeletonCircle size='11' />
+						<Box flex={1}>
+							<Skeleton h='10px' w='60%' mb={2} />
+							<Skeleton h='8px' w='80%' />
+						</Box>
+					</Flex>
+				))}
 
-            <Link as={RouterLink} to='/download' fontSize={12} color={'gray.400'} alignSelf='start' mt={3}>
-                Get the app
-            </Link>
-            <Box fontSize={12} color={'gray.500'} mt={2}>
-                Copyright &copy; {new Date().getFullYear()} Built By{" "}
-				<Link href='https://portfolio-8jmo.onrender.com/' isExternal color='blue.500' fontSize={14} alignSelf={'start'}>
-                    Abakah Joshua
-				</Link>
-            </Box>
-            <h1>Hello {user.firstName}</h1>
-        </VStack>
-    )
+			{!isLoading && suggestedUsers.map((u) => <SuggestedUser key={u._id} user={u} />)}
+
+			<Box pt={6} fontSize='xs' color='ig.secondary' lineHeight='tall'>
+				{FOOTER_LINKS.map((l, i) => (
+					<span key={l.label}>
+						{l.to ? (
+							<Link as={RouterLink} to={l.to} _hover={{ textDecoration: "underline" }}>
+								{l.label}
+							</Link>
+						) : (
+							<Link href={l.href} isExternal _hover={{ textDecoration: "underline" }}>
+								{l.label}
+							</Link>
+						)}
+						{i < FOOTER_LINKS.length - 1 && " · "}
+					</span>
+				))}
+				<Text mt={4} textTransform='uppercase'>
+					© {new Date().getFullYear()} Instagram clone by{" "}
+					<Link href='https://portfolio-8jmo.onrender.com/' isExternal color='ig.text'>
+						Abakah Joshua
+					</Link>
+				</Text>
+			</Box>
+		</VStack>
+	);
 }
-
-const CommentSkeleton = () => {
-    return (
-        <>
-            <Flex gap={4} w={"full"} alignItems={"center"} py={8} px={6}>
-                <SkeletonCircle h={10} w='10' />
-                <Flex gap={1} flexDir={"column"}>
-                    <Skeleton height={2} width={100} />
-                    <Skeleton height={2} width={50} />
-                </Flex>
-            </Flex>
-            <Flex gap={4} w={"full"} alignItems={"center"} py={8} px={6}>
-                <SkeletonCircle h={10} w='10' />
-                <Flex gap={1} flexDir={"column"}>
-                    <Skeleton height={2} width={100} />
-                    <Skeleton height={2} width={50} />
-                </Flex>
-            </Flex>
-            <Flex gap={4} w={"full"} alignItems={"center"} py={8} px={6}>
-                <SkeletonCircle h={10} w='10' />
-                <Flex gap={1} flexDir={"column"}>
-                    <Skeleton height={2} width={100} />
-                    <Skeleton height={2} width={50} />
-                </Flex>
-            </Flex>
-            <Flex gap={4} w={"full"} alignItems={"center"} py={8} px={6}>
-                <SkeletonCircle h={10} w='10' />
-                <Flex gap={1} flexDir={"column"}>
-                    <Skeleton height={2} width={100} />
-                    <Skeleton height={2} width={50} />
-                </Flex>
-            </Flex>
-            
-        </>
-        
-    );
-};

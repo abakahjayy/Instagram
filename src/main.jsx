@@ -21,13 +21,39 @@ if ('serviceWorker' in navigator) {
 }
 
 
+// Instagram's current dark theme (instagram.com, 2026): near-black blue-grey page,
+// #f5f5f5 text, system font at 14px, lighter surfaces for menus/dialogs.
+const colors = {
+  ig: {
+    bg: "#0c1014",
+    surface: "#1b1f24",
+    hover: "rgba(255,255,255,0.08)",
+    border: "rgba(255,255,255,0.12)",
+    text: "#f5f5f5",
+    secondary: "#a8a8a8",
+    link: "#0095f6",
+  },
+};
+
+const fonts = {
+  heading: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
+  body: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
+};
+
 const styles = {
   global: (props) => ({
     body: {
-      bg: mode("gray.100", "#000")(props),
-      color: mode("gray.800", "whiteAlpha.900")(props),
+      bg: mode("gray.100", "ig.bg")(props),
+      color: mode("gray.800", "ig.text")(props),
+      fontSize: "14px",
     },
   }),
+};
+
+// Dialogs and menus sit on the lighter surface, like Instagram's.
+const components = {
+  Modal: { baseStyle: { dialog: { bg: "ig.surface" } } },
+  Menu: { baseStyle: { list: { bg: "ig.surface", borderColor: "ig.border" }, item: { bg: "ig.surface", _hover: { bg: "ig.hover" } } } },
 };
 
 const config = {
@@ -37,7 +63,7 @@ const config = {
 
 
 // 3. extend the theme
-const theme = extendTheme({ config, styles });
+const theme = extendTheme({ config, styles, colors, fonts, components });
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

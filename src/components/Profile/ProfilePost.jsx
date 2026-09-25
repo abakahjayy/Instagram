@@ -111,7 +111,7 @@ export default function ProfilePost({post}) {
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
-          <ModalBody bg={"black"} pb={5}>
+          <ModalBody bg={"ig.bg"} pb={5}>
             <Flex
               gap='4'
               direction={{ base: "column", md: "row" }}
