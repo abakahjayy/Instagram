@@ -1,5 +1,6 @@
 import useAuthStore from "../store/useAuthStore";
 import API from "../utils/api";
+import { reportAuthEvent } from "../utils/authEvents";
 import useShowToast from "./useShowToast";
 
 const useSignup = () => {
@@ -30,6 +31,7 @@ const useSignup = () => {
             const userData = response.data;
             localStorage.setItem("user-info", JSON.stringify(userData));
             registerUser(userData); // Update Zustand state
+            reportAuthEvent("signup"); // welcome email
             setError(null)
             showToast("Success", "Signup successful", "success");
         } catch (err) {

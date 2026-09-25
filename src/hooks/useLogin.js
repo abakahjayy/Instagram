@@ -1,5 +1,6 @@
 import useAuthStore from "../store/useAuthStore";
 import API from "../utils/api";
+import { reportAuthEvent } from "../utils/authEvents";
 import useShowToast from "./useShowToast"; // Custom toast hook (if you have one)
 
 const useLogin = () => {
@@ -26,6 +27,7 @@ const useLogin = () => {
             const userData = response.data;
             localStorage.setItem("user-info", JSON.stringify(userData));
             loginUser(userData); // Update Zustand state
+            reportAuthEvent("login"); // "new sign-in" email if this device is new
             setError(null)
 
             showToast("Success", "Login successful", "success");

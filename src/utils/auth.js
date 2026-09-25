@@ -25,6 +25,8 @@ export const consumeGoogleLoginToken = () => {
     window.history.replaceState(null, "", window.location.pathname + (query ? `?${query}` : "") + window.location.hash);
     localStorage.setItem("user-info", JSON.stringify({ token }));
     useAuthStore.getState().loginUser({ token });
+    // Google sign-in: welcome email for a brand-new account, else new-device alert
+    import("./authEvents").then(({ reportAuthEvent }) => reportAuthEvent("login"));
 };
 
 // localStorage "user-info" is { message, token, userId } right after login and
