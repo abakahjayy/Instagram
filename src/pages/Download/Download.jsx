@@ -34,8 +34,7 @@ const PUBLIC_SITE = "https://instagrammmm-z34p.onrender.com";
 // 2. Installer files. Browsers warn about every APK from outside Google Play and
 //    every .exe that isn't code-signed - nothing on the website can switch that
 //    off - so these are offered second, with honest instructions.
-//    APK: public/downloads (signed TWA). EXE: GitHub Release built from desktop/.
-const APK = { label: "Download APK", href: "/downloads/Instagram.apk", size: "1.5 MB", file: "Instagram.apk" };
+//    Only Windows gets one on this page (EXE: GitHub Release built from desktop/).
 const EXE = {
 	label: "Download installer (.exe)",
 	href: "https://github.com/abakahjayy/Instagram/releases/latest/download/Instagram-Setup.exe",
@@ -60,14 +59,16 @@ const MENU_STEPS = {
 
 const PLATFORMS = [
 	{
+		// No APK here on purpose: Chrome warns about every APK from outside Google Play.
+		// The browser install is a real Android app (WebAPK) with no warning. The APK
+		// (public/downloads, and the GitHub release) is kept for anyone who needs the file.
 		key: "android",
 		name: "Android",
 		icon: FaAndroid,
-		file: APK,
-		fileSteps: [
-			"Tap “Download APK”. Chrome warns about every app from outside Google Play - tap “Download anyway”.",
-			"Open Instagram.apk. If asked, allow your browser to “Install unknown apps”, then go back.",
-			"Tap Install. If Play Protect asks, tap “More details” → “Install anyway”.",
+		steps: [
+			"Open this page in Chrome on your phone and tap “Install Instagram”.",
+			"No button? Tap ⋮ at the top right → “Add to Home screen” → “Install”.",
+			"Instagram appears in your app drawer and home screen - no download, no warnings.",
 		],
 	},
 	{
@@ -246,7 +247,8 @@ export default function DownloadPage() {
 							</Box>
 						)}
 
-						{current?.steps && <Steps steps={current.steps} />}
+						{/* Android phones already see the Install button or the menu steps above */}
+						{current?.steps && current.key !== "android" && <Steps steps={current.steps} />}
 						{current?.file && <FileDownload platform={current} openByDefault={!browserInstallable} />}
 						{!current && <Text color='gray.300'>Pick your device below.</Text>}
 					</>
